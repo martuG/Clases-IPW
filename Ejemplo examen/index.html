@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autodiagnóstico — HTML, CSS y modelo de caja</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-bar">
+            <p class="eyebrow">Introducción a la Programación Web · Unidad 2–3</p>
+            <h1>Autodiagnóstico de teoría</h1>
+            <p class="header-lead">
+                Cuestionario de autoevaluación: multiple choice, verdadero/falso y completar la frase.
+                Cubre HTML (con más profundidad), CSS, modelo de caja y diseño responsive.
+            </p>
+        </div>
+    </header>
+
+    <main>
+        <section id="pantalla-inicio" class="panel" aria-labelledby="titulo-inicio">
+            <h2 id="titulo-inicio">Antes de empezar</h2>
+            <p>
+                Son <strong>50 preguntas</strong> basadas en los apuntes de la unidad.
+                <strong>10</strong> son de nivel bajo y <strong>40</strong> de nivel medio-alto.
+                Cada consigna lleva etiquetas de nivel, tema, tipo y enfoque.
+            </p>
+            <ul class="resumen-lista">
+                <li><span class="badge badge-html">HTML</span> más preguntas y casos aplicados de estructura semántica</li>
+                <li><span class="badge badge-css">CSS</span> selectores, cascada, unidades y presentación</li>
+                <li><span class="badge badge-box">Caja y responsive</span> padding, margin, <code>box-sizing</code> y media queries</li>
+            </ul>
+            <fieldset class="filtros">
+                <legend>Filtrar el recorrido (opcional)</legend>
+                <label>
+                    Tema
+                    <select id="filtro-tema">
+                        <option value="todos">Todos los temas</option>
+                        <option value="html">Solo HTML</option>
+                        <option value="css">Solo CSS</option>
+                        <option value="box">Solo modelo de caja y responsive</option>
+                    </select>
+                </label>
+                <label>
+                    Nivel
+                    <select id="filtro-nivel">
+                        <option value="todos">Todos los niveles</option>
+                        <option value="bajo">Solo nivel bajo</option>
+                        <option value="medio-alto">Solo nivel medio-alto</option>
+                    </select>
+                </label>
+            </fieldset>
+            <p class="ayuda">Podés avanzar, volver atrás y corregir al final. Las respuestas no se envían a ningún servidor.</p>
+            <button type="button" class="boton" id="btn-comenzar">Comenzar autodiagnóstico</button>
+        </section>
+
+        <section id="pantalla-quiz" class="panel oculto" aria-labelledby="titulo-pregunta">
+            <div class="quiz-meta">
+                <p id="progreso-texto">Pregunta 1 de 50</p>
+                <div class="barra" aria-hidden="true">
+                    <div id="barra-progreso" class="barra-lleno"></div>
+                </div>
+            </div>
+
+            <article class="tarjeta-pregunta">
+                <div id="etiquetas" class="etiquetas" aria-label="Etiquetas de la pregunta"></div>
+                <h2 id="titulo-pregunta">Pregunta</h2>
+                <pre id="bloque-codigo" class="oculto"><code></code></pre>
+                <div id="zona-respuesta"></div>
+                <p id="feedback" class="feedback oculto" role="status"></p>
+            </article>
+
+            <div class="acciones">
+                <button type="button" class="boton boton-secundario" id="btn-anterior">Anterior</button>
+                <button type="button" class="boton boton-secundario" id="btn-comprobar">Comprobar esta</button>
+                <button type="button" class="boton" id="btn-siguiente">Siguiente</button>
+            </div>
+            <div class="acciones-final">
+                <button type="button" class="boton boton-acento" id="btn-corregir">Corregir todo el cuestionario</button>
+            </div>
+        </section>
+
+        <section id="pantalla-resultado" class="panel oculto" aria-labelledby="titulo-resultado">
+            <h2 id="titulo-resultado">Resultado del autodiagnóstico</h2>
+            <p id="puntaje-general" class="puntaje"></p>
+            <div id="desglose" class="desglose"></div>
+            <div class="acciones">
+                <button type="button" class="boton" id="btn-revisar">Revisar respuestas</button>
+                <button type="button" class="boton boton-secundario" id="btn-reiniciar">Volver a empezar</button>
+            </div>
+            <div id="revision" class="revision"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Material de práctica · Introducción a la Programación Web</p>
+    </footer>
+
+    <script src="questions.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

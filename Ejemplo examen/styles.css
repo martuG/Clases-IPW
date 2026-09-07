@@ -1,0 +1,402 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+    --ink: #1a202c;
+    --muted: #4a5568;
+    --paper: #f7fafc;
+    --card: #ffffff;
+    --line: #e2e8f0;
+    --accent: #2b6cb0;
+    --accent-soft: #ebf8ff;
+    --alert: #c53030;
+    --alert-soft: #fff5f5;
+    --ok: #276749;
+    --ok-soft: #c6f6d5;
+    --warn: #c05621;
+    --warn-soft: #feebc8;
+    --radius: 12px;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background-color: var(--paper);
+    line-height: 1.6;
+}
+
+a {
+    color: var(--accent);
+}
+
+code {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.92em;
+    background: #edf2f7;
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+}
+
+.site-header {
+    background: linear-gradient(160deg, #234e52 0%, #2b6cb0 65%);
+    color: #fff;
+    padding: 2rem 5% 2.25rem;
+}
+
+.header-bar {
+    width: 90%;
+    max-width: 880px;
+    margin: 0 auto;
+}
+
+.eyebrow {
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    opacity: 0.85;
+    margin: 0 0 0.5rem;
+}
+
+.site-header h1 {
+    margin: 0 0 0.75rem;
+    line-height: 1.15;
+    font-size: 2rem;
+}
+
+.header-lead {
+    margin: 0;
+    max-width: 44rem;
+    font-size: 1.05rem;
+    opacity: 0.95;
+}
+
+main {
+    width: 90%;
+    max-width: 880px;
+    margin: 1.5rem auto 3rem;
+}
+
+.panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.35rem;
+}
+
+.oculto {
+    display: none;
+}
+
+.resumen-lista {
+    padding-left: 1.15rem;
+}
+
+.resumen-lista li {
+    margin-bottom: 0.45rem;
+}
+
+.filtros {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 1.25rem 0;
+}
+
+.filtros legend {
+    padding: 0 0.4rem;
+    font-weight: 700;
+}
+
+.filtros label {
+    display: block;
+    margin-top: 0.75rem;
+    font-weight: 600;
+}
+
+.filtros select,
+.campo-completar {
+    display: block;
+    width: 100%;
+    margin-top: 0.35rem;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font: inherit;
+}
+
+.ayuda {
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.boton {
+    display: inline-block;
+    background-color: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.7rem 1.2rem;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.boton:hover,
+.boton:focus {
+    filter: brightness(1.08);
+}
+
+.boton:focus {
+    outline: 3px solid #90cdf4;
+    outline-offset: 2px;
+}
+
+.boton:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    filter: none;
+}
+
+.boton-secundario {
+    background: #edf2f7;
+    color: var(--ink);
+}
+
+.boton-acento {
+    background: #234e52;
+}
+
+.quiz-meta {
+    margin-bottom: 1rem;
+}
+
+#progreso-texto {
+    margin: 0 0 0.4rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.barra {
+    height: 8px;
+    background: #edf2f7;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.barra-lleno {
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+}
+
+.tarjeta-pregunta h2 {
+    margin: 0.35rem 0 0.85rem;
+    font-size: 1.2rem;
+    line-height: 1.35;
+}
+
+.etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+}
+
+.badge {
+    display: inline-block;
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.badge-bajo {
+    background: var(--ok-soft);
+    color: var(--ok);
+}
+
+.badge-medio {
+    background: var(--warn-soft);
+    color: var(--warn);
+}
+
+.badge-html {
+    background: #ebf8ff;
+    color: #2b6cb0;
+}
+
+.badge-css {
+    background: #e9d8fd;
+    color: #553c9a;
+}
+
+.badge-box {
+    background: #e6fffa;
+    color: #234e52;
+}
+
+.badge-tipo,
+.badge-enfoque {
+    background: #edf2f7;
+    color: #2d3748;
+}
+
+pre {
+    background: #1a202c;
+    color: #e2e8f0;
+    padding: 1rem 1.1rem;
+    border-radius: 10px;
+    overflow-x: auto;
+}
+
+pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+}
+
+.opciones {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.opcion {
+    display: flex;
+    gap: 0.65rem;
+    align-items: flex-start;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.7rem 0.8rem;
+    cursor: pointer;
+    background: #fff;
+}
+
+.opcion:hover,
+.opcion:focus-within {
+    border-color: #90cdf4;
+    background: var(--accent-soft);
+}
+
+.opcion.correcta {
+    border-color: #38a169;
+    background: var(--ok-soft);
+}
+
+.opcion.incorrecta {
+    border-color: #e53e3e;
+    background: var(--alert-soft);
+}
+
+.acciones,
+.acciones-final {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.15rem;
+}
+
+.acciones-final {
+    padding-top: 0.4rem;
+}
+
+.feedback {
+    margin: 1rem 0 0;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+}
+
+.feedback.ok {
+    background: var(--ok-soft);
+    color: var(--ok);
+}
+
+.feedback.mal {
+    background: var(--alert-soft);
+    color: var(--alert);
+}
+
+.puntaje {
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+.desglose {
+    display: grid;
+    gap: 0.7rem;
+    margin: 1rem 0 1.4rem;
+}
+
+.ficha-desglose {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    background: #fff;
+}
+
+.ficha-desglose strong {
+    display: block;
+}
+
+.revision {
+    margin-top: 1.75rem;
+}
+
+.item-revision {
+    border-top: 1px solid var(--line);
+    padding: 1rem 0;
+}
+
+.item-revision h3 {
+    margin: 0.4rem 0 0.5rem;
+    font-size: 1.05rem;
+}
+
+.tu-respuesta {
+    margin: 0.25rem 0;
+}
+
+.explicacion {
+    margin: 0.4rem 0 0;
+    color: var(--muted);
+}
+
+footer {
+    width: 90%;
+    max-width: 880px;
+    margin: 0 auto 2rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+@media (min-width: 768px) {
+    .site-header h1 {
+        font-size: 2.25rem;
+    }
+
+    .panel {
+        padding: 1.75rem 1.75rem;
+    }
+
+    .filtros {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .filtros legend {
+        grid-column: 1 / -1;
+    }
+
+    .filtros label {
+        margin-top: 0;
+    }
+}
