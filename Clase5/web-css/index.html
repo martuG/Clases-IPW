@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 5 — CSS: el lenguaje de la presentación</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-bar">
+            <p class="eyebrow">Introducción a la Programación Web · Clase 5</p>
+            <h1>CSS: el lenguaje de la presentación</h1>
+            <p class="header-lead">
+                HTML describe <strong>qué es</strong> cada parte de la página.
+                CSS describe <strong>cómo se ve</strong>. En esta materia van en archivos separados.
+            </p>
+            <p class="header-files"><code>index.html</code> + <code>styles.css</code></p>
+        </div>
+        <nav class="site-nav" aria-label="Secciones de la clase">
+            <a href="#objetivos">Objetivos</a>
+            <a href="#problema">¿Para qué?</a>
+            <a href="#formas">Cómo se aplica</a>
+            <a href="#sintaxis">Sintaxis</a>
+            <a href="#selectores">Selectores</a>
+            <a href="#cascada">Cascada</a>
+            <a href="#colores">Colores</a>
+            <a href="#unidades">Unidades</a>
+            <a href="#display">Display</a>
+            <a href="#actividad">Actividad</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="objetivos" class="section">
+            <p class="kicker">Antes de empezar</p>
+            <h2>Objetivos de la clase</h2>
+            <ul class="objective-list">
+                <li>Explicar el rol de CSS y por qué se separa del HTML.</li>
+                <li>Escribir reglas con selectores y declaraciones.</li>
+                <li>Usar selectores de elemento, clase, identificador y algunos combinadores.</li>
+                <li>Aplicar colores, tipografía, fondos y unidades.</li>
+                <li>Entender cascada, herencia y especificidad a nivel introductorio.</li>
+                <li>Mantener un archivo <code>styles.css</code> vinculado desde <code>index.html</code>.</li>
+            </ul>
+            <aside class="callout">
+                <p class="callout-title">Qué no entra hoy</p>
+                <p>
+                    El modelo de caja (<code>margin</code>, <code>padding</code>, <code>border</code>)
+                    y el diseño responsive tienen
+                    <a href="../web/index.html">su propia web de clase</a>.
+                </p>
+            </aside>
+        </section>
+
+        <section id="problema" class="section">
+            <h2>1. ¿Qué problema resuelve CSS?</h2>
+            <p>
+                Sin CSS, el navegador muestra el HTML con estilos por defecto: títulos grandes,
+                enlaces azules subrayados, párrafos negros, sin diseño de página.
+                Alcanza para leer. No alcanza para construir una interfaz.
+            </p>
+            <div class="compare-row">
+                <article class="demo-card">
+                    <h3>HTML solo</h3>
+                    <div class="bare-preview">
+                        <h4>Ficha personal</h4>
+                        <p>Estudiante de Introducción a la Programación Web.</p>
+                        <p><a href="#problema">Ir a contacto</a></p>
+                    </div>
+                </article>
+                <article class="demo-card">
+                    <h3>HTML + CSS</h3>
+                    <div class="dressed-preview">
+                        <h4>Ficha personal</h4>
+                        <p>Estudiante de Introducción a la Programación Web.</p>
+                        <p><a href="#problema">Ir a contacto</a></p>
+                    </div>
+                </article>
+            </div>
+            <p>CSS permite una identidad visual, distribuir contenido, cambiar el diseño sin reescribir el HTML y reutilizar el mismo estilo en varias páginas.</p>
+            <aside class="callout">
+                <p>
+                    <strong>Si cambio el CSS y no toco el HTML, ¿cambia el significado de la página?</strong>
+                    En principio, no. Sigue siendo un título o un párrafo. Cambia la presentación.
+                </p>
+            </aside>
+        </section>
+
+        <section id="formas" class="section">
+            <h2>2. Tres formas de aplicar CSS (y cuál usar)</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Forma</th>
+                            <th>Dónde se escribe</th>
+                            <th>¿Se usa en la materia?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>En línea</strong></td>
+                            <td><code>style=""</code> en un elemento</td>
+                            <td>No, salvo demostraciones</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Interna</strong></td>
+                            <td><code>&lt;style&gt;</code> en el <code>&lt;head&gt;</code></td>
+                            <td>No como práctica habitual</td>
+                        </tr>
+                        <tr class="row-ok">
+                            <td><strong>Externa</strong></td>
+                            <td>archivo <code>.css</code> con <code>&lt;link&gt;</code></td>
+                            <td><strong>Sí: es la forma obligatoria</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <pre><code>&lt;link rel="stylesheet" href="styles.css"&gt;</code></pre>
+            <p>
+                Esa línea va en el <code>&lt;head&gt;</code>. Si el nombre o la ruta están mal,
+                la página se ve sin estilos: el HTML sigue funcionando, pero “desnudo”.
+                Un mismo <code>styles.css</code> puede servir para <code>index.html</code> y <code>contacto.html</code>.
+            </p>
+        </section>
+
+        <section id="sintaxis" class="section">
+            <h2>3. Sintaxis de una regla</h2>
+            <div class="syntax-diagram" aria-hidden="false">
+                <p class="syntax-line">
+                    <span class="token token-selector">h1</span>
+                    <span class="token token-brace">{</span>
+                    <span class="token token-prop">color</span><span class="token token-colon">:</span>
+                    <span class="token token-value">#1a365d</span><span class="token token-semi">;</span>
+                    <span class="token token-brace">}</span>
+                </p>
+                <ul class="syntax-legend">
+                    <li><span class="swatch swatch-selector">selector</span> a qué elementos aplica</li>
+                    <li><span class="swatch swatch-prop">propiedad</span> qué se cambia</li>
+                    <li><span class="swatch swatch-value">valor</span> el resultado pedido</li>
+                    <li><span class="swatch swatch-semi">;</span> cierra la declaración</li>
+                </ul>
+            </div>
+            <pre><code>h1 {
+    color: #1a365d;
+    font-size: 2rem;
+    text-align: center;
+}</code></pre>
+            <ul>
+                <li>Cada declaración termina en <strong>punto y coma</strong>.</li>
+                <li>Las propiedades van en minúsculas y con guion: <code>font-size</code>, <code>background-color</code>.</li>
+                <li>La indentación es para personas, no para el navegador.</li>
+                <li>Comentarios: <code>/* así */</code>. CSS no admite <code>//</code> ni <code>&lt;!-- --&gt;</code>.</li>
+            </ul>
+        </section>
+
+        <section id="selectores" class="section">
+            <h2>4. Selectores</h2>
+            <p>El selector decide <strong>qué se estiliza</strong>. Es la parte más importante de la regla.</p>
+
+            <div class="lab">
+                <p class="lab-title">Laboratorio: toquen un selector y miren qué se ilumina</p>
+                <div class="selector-btns" id="selector-btns">
+                    <button type="button" data-selector="p"><code>p</code> elemento</button>
+                    <button type="button" data-selector=".destacado"><code>.destacado</code> clase</button>
+                    <button type="button" data-selector="#unico"><code>#unico</code> id</button>
+                    <button type="button" data-selector="a[target='_blank']"><code>a[target]</code> atributo</button>
+                    <button type="button" data-selector="*"><code>*</code> universal</button>
+                    <button type="button" data-selector="">limpiar</button>
+                </div>
+                <div class="selector-stage" id="selector-stage">
+                    <h3>Noticia del día</h3>
+                    <p>Párrafo normal, sin clase.</p>
+                    <p class="destacado">Párrafo con clase <code>destacado</code>.</p>
+                    <p class="destacado aviso">Dos clases: <code>destacado aviso</code>.</p>
+                    <p id="unico">Párrafo con <code>id="unico"</code>.</p>
+                    <p>
+                        <a href="https://developer.mozilla.org" target="_blank">Enlace externo</a>
+                        ·
+                        <a href="#selectores">Enlace interno</a>
+                    </p>
+                </div>
+                <p class="hint" id="selector-hint">Todavía no hay selector aplicado.</p>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Selector</th>
+                            <th>HTML</th>
+                            <th>CSS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Elemento</td>
+                            <td><code>&lt;p&gt;</code></td>
+                            <td><code>p { }</code></td>
+                        </tr>
+                        <tr>
+                            <td>Clase (la más usada)</td>
+                            <td><code>class="destacado"</code></td>
+                            <td><code>.destacado { }</code></td>
+                        </tr>
+                        <tr>
+                            <td>Id (único en la página)</td>
+                            <td><code>id="contacto"</code></td>
+                            <td><code>#contacto { }</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>En esta materia se prefiere <strong>clase</strong> para estilos. El <code>id</code> se reserva para anclas, formularios y casos puntuales. Un punto o una mayúscula de más y el selector no coincide.</p>
+        </section>
+
+        <section id="combinadores" class="section">
+            <h2>5. Combinadores y pseudo-clases</h2>
+            <div class="compare-row">
+                <article class="demo-card">
+                    <h3>Combinadores</h3>
+                    <pre><code>article p { }     /* descendiente */
+nav > ul { }      /* hijo directo */
+h2 + p { }        /* hermano siguiente */</code></pre>
+                    <div class="combo-demo">
+                        <h4>Título</h4>
+                        <p class="combo-next">Este párrafo está justo después del h4: <code>h4 + p</code>.</p>
+                        <p>Este ya no es adyacente.</p>
+                    </div>
+                </article>
+                <article class="demo-card">
+                    <h3>Pseudo-clases: estados</h3>
+                    <p>No son otro elemento: son un <strong>estado</strong> o una posición.</p>
+                    <a class="hover-demo" href="#combinadores">Pasá el cursor · <code>a:hover</code></a>
+                    <label class="focus-demo">
+                        Tab hasta acá
+                        <input type="text" placeholder=":focus muestra un outline">
+                    </label>
+                    <p>No hay que sacar el foco del teclado sin dejar un reemplazo visible.</p>
+                </article>
+            </div>
+            <p>Los pseudo-elementos (<code>::before</code>, <code>::after</code>, <code>::first-line</code>) existen; no son el centro de esta clase.</p>
+        </section>
+
+        <section id="cascada" class="section">
+            <h2>6. Cascada, herencia y especificidad</h2>
+            <p>Cuando varias reglas apuntan al mismo elemento, CSS decide cuál gana. Por eso se llama <em>cascading</em>.</p>
+
+            <h3>Orden</h3>
+            <p>Si la especificidad es la misma, <strong>gana la que aparece última</strong>.</p>
+            <pre><code>p { color: black; }
+p { color: navy; } /* esta prevalece */</code></pre>
+
+            <h3>Especificidad (versión introductoria)</h3>
+            <ol class="spec-ladder">
+                <li>Elemento: <code>p</code>, <code>h1</code></li>
+                <li>Clase: <code>.destacado</code></li>
+                <li>Id: <code>#contacto</code></li>
+                <li>Estilo en línea: <code>style=""</code></li>
+                <li><code>!important</code> (evitar)</li>
+            </ol>
+            <p>Cuanto más específico es el selector, más difícil es de sobrescribir.</p>
+
+            <div class="lab">
+                <p class="lab-title">Laboratorio: cuál gana</p>
+                <p>El párrafo de abajo tiene clase <code>destacado</code> e <code>id="muestra"</code>. Activá reglas y mirá el color.</p>
+                <div class="spec-btns" id="spec-btns">
+                    <label><input type="checkbox" data-rule="element"> <code>p { color: black }</code></label>
+                    <label><input type="checkbox" data-rule="class"> <code>.destacado { color: crimson }</code></label>
+                    <label><input type="checkbox" data-rule="id"> <code>#muestra { color: navy }</code></label>
+                    <label><input type="checkbox" data-rule="inline"> <code>style="color: green"</code></label>
+                </div>
+                <p class="spec-sample destacado" id="muestra">Inscripción abierta</p>
+                <p class="hint" id="spec-hint">Ninguna regla extra: hereda el color de la página.</p>
+            </div>
+
+            <h3>Herencia</h3>
+            <div class="compare-row">
+                <article class="demo-card inherit-yes">
+                    <h3>Se heredan</h3>
+                    <p><code>color</code>, <code>font-family</code>, <code>line-height</code></p>
+                    <div class="inherit-box">
+                        Padre con Georgia y color oscuro
+                        <p>El hijo hereda tipografía y color.</p>
+                    </div>
+                </article>
+                <article class="demo-card">
+                    <h3>No se heredan</h3>
+                    <p><code>margin</code>, <code>padding</code>, <code>border</code>, <code>width</code>, <code>background</code></p>
+                </article>
+            </div>
+            <aside class="callout">
+                <p class="callout-title">Si un estilo “no se aplica”</p>
+                <ol class="steps">
+                    <li>¿El archivo CSS está bien vinculado?</li>
+                    <li>¿El selector coincide con el HTML? (mayúsculas, punto, <code>#</code>)</li>
+                    <li>¿Otra regla más específica o posterior está ganando?</li>
+                </ol>
+                <p>F12 → <em>Elements / Inspector</em> muestra qué reglas se aplican y cuáles quedan tachadas.</p>
+            </aside>
+        </section>
+
+        <section id="colores" class="section">
+            <h2>7. Colores</h2>
+            <p>Las cuatro notaciones de abajo son <strong>el mismo azul</strong> de esta clase.</p>
+            <div class="color-grid">
+                <article class="color-card" style="--swatch: navy;">
+                    <div class="color-swatch"></div>
+                    <h3>Nombre</h3>
+                    <code>navy</code>
+                </article>
+                <article class="color-card" style="--swatch: #2b6cb0;">
+                    <div class="color-swatch"></div>
+                    <h3>Hexadecimal</h3>
+                    <code>#2b6cb0</code>
+                    <p>La más usada. <code>#fff</code> = <code>#ffffff</code>.</p>
+                </article>
+                <article class="color-card" style="--swatch: rgb(43, 108, 176);">
+                    <div class="color-swatch"></div>
+                    <h3>RGB</h3>
+                    <code>rgb(43, 108, 176)</code>
+                </article>
+                <article class="color-card" style="--swatch: hsl(207, 61%, 43%);">
+                    <div class="color-swatch"></div>
+                    <h3>HSL</h3>
+                    <code>hsl(207, 61%, 43%)</code>
+                </article>
+            </div>
+            <div class="compare-row">
+                <article class="demo-card contrast-bad">
+                    <h3>Contraste malo</h3>
+                    <p>Gris claro sobre blanco: no es un detalle estético, es un problema de accesibilidad.</p>
+                </article>
+                <article class="demo-card contrast-good">
+                    <h3>Contraste bueno</h3>
+                    <p>El texto tiene que poder leerse sobre el fondo. También con transparencia: <code>rgba(..., 0.8)</code>.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="unidades" class="section">
+            <h2>8. Unidades</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Unidad</th>
+                            <th>Tipo</th>
+                            <th>Uso típico</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>px</code></td>
+                            <td>absoluta (en la práctica)</td>
+                            <td>Bordes, sombras, ajustes finos</td>
+                        </tr>
+                        <tr>
+                            <td><code>%</code></td>
+                            <td>relativa al contenedor</td>
+                            <td>Anchos de columnas</td>
+                        </tr>
+                        <tr>
+                            <td><code>em</code></td>
+                            <td>relativa al <code>font-size</code> del elemento</td>
+                            <td>Espaciados ligados al texto</td>
+                        </tr>
+                        <tr>
+                            <td><code>rem</code></td>
+                            <td>relativa al <code>font-size</code> de <code>html</code></td>
+                            <td>Tipografía y márgenes consistentes</td>
+                        </tr>
+                        <tr>
+                            <td><code>vw</code> / <code>vh</code></td>
+                            <td>relativa al viewport</td>
+                            <td>Altos o anchos respecto de la ventana</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>En esta materia: <strong><code>rem</code> para tipografía</strong>, porcentajes o <code>rem</code> para anchos, <code>px</code> para detalles.</p>
+            <div class="lab">
+                <p class="lab-title">Laboratorio de <code>em</code>: el hijo escala con el padre</p>
+                <label class="range-label">
+                    <span>font-size del padre: <strong id="em-val">20px</strong></span>
+                    <input type="range" id="em-range" min="12" max="32" value="20">
+                </label>
+                <div class="em-parent" id="em-parent">
+                    Padre
+                    <div class="em-child">Hijo <code>1.5em</code> → <strong id="em-child-val">30px</strong></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tipografia" class="section">
+            <h2>9. Tipografía</h2>
+            <div class="type-sample" id="type-sample">
+                Introducción a la Programación Web
+            </div>
+            <div class="type-controls" id="type-controls">
+                <button type="button" data-type="sans">sans-serif</button>
+                <button type="button" data-type="serif">serif</button>
+                <button type="button" data-type="mono">monospace</button>
+                <button type="button" data-type="bold">weight 700</button>
+                <button type="button" data-type="italic">italic</button>
+                <button type="button" data-type="center">centrado</button>
+                <button type="button" data-type="upper">MAYÚSCULAS</button>
+                <button type="button" data-type="reset">reset</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Propiedad</th>
+                            <th>Qué controla</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>font-family</code></td>
+                            <td>Pila de fuentes, con un genérico al final (<code>sans-serif</code>)</td>
+                        </tr>
+                        <tr>
+                            <td><code>font-size</code></td>
+                            <td>Tamaño del texto, no el de la caja</td>
+                        </tr>
+                        <tr>
+                            <td><code>font-weight</code></td>
+                            <td><code>normal</code>, <code>bold</code>, o 100–900</td>
+                        </tr>
+                        <tr>
+                            <td><code>line-height</code></td>
+                            <td>Interlineado. Adimensional (<code>1.6</code>) es una buena práctica</td>
+                        </tr>
+                        <tr>
+                            <td><code>text-align</code> / <code>text-decoration</code></td>
+                            <td>Alineación y subrayado. En enlaces, subrayar otra vez en <code>:hover</code> y <code>:focus</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="display" class="section">
+            <h2>10. Fondo, display y visibilidad</h2>
+            <p><code>display</code> define cómo participa el elemento en el flujo de la página.</p>
+            <div class="lab">
+                <p class="lab-title">Laboratorio: el mismo HTML, distinto <code>display</code></p>
+                <div class="display-btns" id="display-btns">
+                    <button type="button" data-display="block" class="is-active">block</button>
+                    <button type="button" data-display="inline">inline</button>
+                    <button type="button" data-display="inline-block">inline-block</button>
+                    <button type="button" data-display="none">none</button>
+                </div>
+                <div class="display-stage" id="display-stage">
+                    <span class="display-item">Uno</span>
+                    <span class="display-item">Dos</span>
+                    <span class="display-item">Tres</span>
+                </div>
+                <p class="hint" id="display-hint">block: cada uno ocupa todo el ancho y arranca en una línea nueva.</p>
+            </div>
+            <div class="compare-row">
+                <article class="demo-card">
+                    <h3><code>display: none</code></h3>
+                    <p>No se muestra y <strong>no ocupa espacio</strong>.</p>
+                    <div class="hide-row">
+                        <span class="hide-box">A</span>
+                        <span class="hide-box is-none">B oculto</span>
+                        <span class="hide-box">C</span>
+                    </div>
+                </article>
+                <article class="demo-card">
+                    <h3><code>visibility: hidden</code></h3>
+                    <p>Invisible, pero <strong>sigue ocupando su lugar</strong>.</p>
+                    <div class="hide-row">
+                        <span class="hide-box">A</span>
+                        <span class="hide-box is-invisible">B oculto</span>
+                        <span class="hide-box">C</span>
+                    </div>
+                </article>
+            </div>
+            <p><code>flex</code> y <code>grid</code> son modelos de distribución: se introducen cuando haga falta armar filas y columnas. El padding de un botón se ve en la web del modelo de caja.</p>
+        </section>
+
+        <section id="ordenado" class="section">
+            <h2>11. Un archivo CSS ordenado</h2>
+            <pre><code>/* 1. Reset mínimo */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* 2. Tipografía de body (se hereda) */
+body { margin: 0; font-family: "Segoe UI", sans-serif; }
+
+/* 3. Enlaces */
+a:hover, a:focus { text-decoration: underline; }
+
+/* 4. Componentes */
+.boton { display: inline-block; padding: 0.6rem 1.2rem; }</code></pre>
+            <ul>
+                <li>Clases en minúsculas y con guion: <code>.tarjeta-curso</code>, no <code>.tarjetaCurso</code>.</li>
+                <li>Nombres de función (<code>.aviso</code>, <code>.boton</code>), no de apariencia rígida (<code>.texto-rojo-grande</code>).</li>
+                <li>Agrupar declaraciones repetidas en un mismo selector.</li>
+            </ul>
+        </section>
+
+        <section id="errores" class="section">
+            <h2>12. Errores frecuentes</h2>
+            <ul class="error-list">
+                <li><code>href="styles.css"</code> no coincide con el nombre o la carpeta.</li>
+                <li><code>class="destacado"</code> en HTML y <code>.Destacado</code> en CSS.</li>
+                <li>Olvidar el punto de la clase o el <code>#</code> del id.</li>
+                <li>Olvidar el punto y coma: a veces se rompe toda la regla.</li>
+                <li>Usar <code>style=""</code> en cada etiqueta en lugar de clases.</li>
+                <li>Un <code>id</code> distinto para cada estilo, en vez de reutilizar clases.</li>
+                <li>Confundir <code>font-size</code> con el tamaño de la caja.</li>
+                <li>Poner el <code>&lt;link&gt;</code> en el <code>&lt;body&gt;</code> o con la ruta mal escrita.</li>
+            </ul>
+        </section>
+
+        <section id="actividad" class="section">
+            <h2>13. Actividad práctica</h2>
+            <p>Completar <code>styles.css</code> de la ficha personal. No se pide todavía responsive ni un estudio detallado de márgenes.</p>
+            <div class="checklist">
+                <ul>
+                    <li>Vincular <code>styles.css</code>. Nada de estilos en línea ni <code>&lt;style&gt;</code>.</li>
+                    <li>Tipografía y color en <code>body</code> para que hereden los demás.</li>
+                    <li>Estilizar el <code>h1</code> del encabezado.</li>
+                    <li>Nav: sin subrayado; con subrayado en <code>:hover</code> y <code>:focus</code>.</li>
+                    <li>Clase <code>.tarjeta</code> en un bloque del <code>main</code>.</li>
+                    <li>Tabla: encabezados con fondo distinto al cuerpo.</li>
+                    <li>Formulario: labels en bloque, inputs con borde, botón con <code>.boton</code>.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="preguntas" class="section">
+            <h2>14. Preguntas de cierre</h2>
+            <ol class="questions">
+                <li>
+                    <details>
+                        <summary>¿Qué ventaja tiene un CSS externo frente a los estilos en línea?</summary>
+                        <p>Se reutiliza en varias páginas, el HTML queda legible y se puede cambiar el diseño sin tocar el contenido.</p>
+                    </details>
+                </li>
+                <li>
+                    <details>
+                        <summary>¿Cuál es la diferencia entre una clase y un id a la hora de escribir CSS?</summary>
+                        <p>La clase (<code>.destacado</code>) se puede repetir y es la forma habitual de estilizar. El id (<code>#contacto</code>) es único, pesa más en la especificidad y se reserva para anclas o formularios.</p>
+                    </details>
+                </li>
+                <li>
+                    <details>
+                        <summary>Si un <code>p</code> y un <code>.destacado</code> definen colores distintos, ¿cuál gana y por qué?</summary>
+                        <p>Gana la clase: es más específica que el selector de elemento.</p>
+                    </details>
+                </li>
+                <li>
+                    <details>
+                        <summary>¿Qué propiedades se heredan y cuáles no?</summary>
+                        <p>Se heredan <code>color</code> y <code>font-family</code> (también <code>line-height</code>). No se heredan <code>margin</code>, <code>padding</code>, <code>border</code> ni <code>background</code>.</p>
+                    </details>
+                </li>
+                <li>
+                    <details>
+                        <summary>¿Cómo verificarías en el navegador por qué una regla no se está aplicando?</summary>
+                        <p>F12 → Inspector: revisar el vínculo del CSS, si el selector coincide, y qué regla aparece tachada porque otra más específica o posterior ganó.</p>
+                    </details>
+                </li>
+            </ol>
+        </section>
+
+        <section id="recursos" class="section">
+            <h2>15. Material de consulta</h2>
+            <ul>
+                <li><a href="https://developer.mozilla.org/es/docs/Web/CSS">MDN · CSS</a></li>
+                <li><a href="https://developer.mozilla.org/es/docs/Web/CSS/CSS_selectors">MDN · Selectores</a></li>
+                <li><a href="https://developer.mozilla.org/es/docs/Web/CSS/Cascade">MDN · Cascada, especificidad y herencia</a></li>
+                <li><a href="https://jigsaw.w3.org/css-validator/">Validador CSS del W3C</a></li>
+                <li><a href="../web/index.html">Web de la clase: modelo de caja y responsive</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Clase 5 · Introducción a la Programación Web · HTML en un archivo, CSS en otro.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

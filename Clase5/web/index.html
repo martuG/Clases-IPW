@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 5 — Modelo de caja y diseño responsive</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="top-status">
+        <div class="viewport-chip" aria-live="polite">
+            Viewport: <strong id="viewport-width">—</strong>
+            <span id="viewport-label" class="chip-label">—</span>
+        </div>
+    </div>
+    <header class="site-header">
+        <div class="header-bar">
+            <p class="eyebrow">Introducción a la Programación Web · Clase 5</p>
+            <h1>Modelo de caja y diseño responsive</h1>
+            <p class="header-lead">
+                Casi todo lo visible en una página es una caja. CSS controla su espacio interno,
+                su borde y la distancia con las demás. Después, esa misma página tiene que
+                funcionar en un celular, una tablet y una computadora.
+            </p>
+        </div>
+        <nav class="site-nav" aria-label="Secciones de la clase">
+            <a href="#objetivos">Objetivos</a>
+            <a href="#capas">Capas</a>
+            <a href="#padding">Padding</a>
+            <a href="#border">Border</a>
+            <a href="#margin">Margin</a>
+            <a href="#decidir">¿Cuál usar?</a>
+            <a href="#box-sizing">box-sizing</a>
+            <a href="#responsive">Responsive</a>
+            <a href="#simulador">Simulador</a>
+            <a href="#actividad">Actividad</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="objetivos" class="section">
+            <p class="kicker">Antes de empezar</p>
+            <h2>Objetivos de la clase</h2>
+            <p>Al final de esta hora deberían poder hacer todo esto, no solo reconocerlo en una diapositiva:</p>
+            <ul class="objective-list">
+                <li>Dibujar el modelo de caja y ubicar content, padding, border y margin.</li>
+                <li>Decidir cuándo usar <code>padding</code> y cuándo <code>margin</code>.</li>
+                <li>Aplicar bordes y entender <code>box-sizing</code>.</li>
+                <li>Explicar qué es diseño responsive y para qué sirve el viewport.</li>
+                <li>Usar unidades relativas, imágenes fluidas y media queries mobile-first.</li>
+            </ul>
+        </section>
+
+        <section id="capas" class="section">
+            <p class="kicker">Parte A · Modelo de caja</p>
+            <h2>1. Las cuatro capas</h2>
+            <p>
+                Un párrafo, un título, un botón o un <code>div</code> ocupan un rectángulo.
+                Ese rectángulo tiene cuatro capas, de adentro hacia afuera.
+            </p>
+
+            <div class="layers-legend" aria-hidden="true">
+                <span class="swatch swatch-margin">margin</span>
+                <span class="swatch swatch-border">border</span>
+                <span class="swatch swatch-padding">padding</span>
+                <span class="swatch swatch-content">content</span>
+            </div>
+
+            <div class="diagram-wrap">
+                <div class="box-diagram">
+                    <p class="layer-label">margin · espacio externo, transparente</p>
+                    <div class="diagram-border">
+                        <p class="layer-label">border · el borde de la caja</p>
+                        <div class="diagram-padding">
+                            <p class="layer-label">padding · aire interno, con fondo</p>
+                            <div class="diagram-content">
+                                <strong>CONTENT</strong>
+                                <span>texto, imagen u otros elementos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <caption>Qué hace cada capa</caption>
+                    <thead>
+                        <tr>
+                            <th>Capa</th>
+                            <th>Propiedad</th>
+                            <th>Qué es</th>
+                            <th>¿Se ve el fondo?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Contenido</td>
+                            <td><code>width</code> / <code>height</code></td>
+                            <td>Texto, imagen u otros elementos</td>
+                            <td>Sí</td>
+                        </tr>
+                        <tr>
+                            <td>Relleno</td>
+                            <td><code>padding</code></td>
+                            <td>Aire interno</td>
+                            <td>Sí: el fondo llega hasta el borde</td>
+                        </tr>
+                        <tr>
+                            <td>Borde</td>
+                            <td><code>border</code></td>
+                            <td>Línea que cierra la caja</td>
+                            <td>El color del borde</td>
+                        </tr>
+                        <tr>
+                            <td>Margen</td>
+                            <td><code>margin</code></td>
+                            <td>Aire externo</td>
+                            <td>No: es transparente</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <aside class="callout">
+                <p class="callout-title">Para los alumnos · analogía del cuadro</p>
+                <ul>
+                    <li>El <strong>contenido</strong> es la pintura.</li>
+                    <li>El <strong>padding</strong> es el paspartú (el marco interno en blanco).</li>
+                    <li>El <strong>border</strong> es el marco de madera.</li>
+                    <li>El <strong>margin</strong> es la distancia hasta el cuadro de al lado.</li>
+                </ul>
+            </aside>
+        </section>
+
+        <section id="playground" class="section">
+            <p class="kicker">Demo en vivo</p>
+            <h2>Laboratorio del modelo de caja</h2>
+            <p>
+                Muevan los controles. El margen naranja es transparente respecto del contenido:
+                deja ver el fondo del escenario. El padding verde lleva el mismo fondo que la caja.
+            </p>
+
+            <div class="playground">
+                <div class="playground-stage">
+                    <div class="live-box" id="live-box">
+                        <div class="live-content">Contenido</div>
+                    </div>
+                </div>
+                <form class="playground-controls" id="box-controls">
+                    <label>
+                        <span>padding: <strong id="val-padding">24px</strong></span>
+                        <input type="range" id="ctrl-padding" min="0" max="64" value="24">
+                    </label>
+                    <label>
+                        <span>border: <strong id="val-border">8px</strong></span>
+                        <input type="range" id="ctrl-border" min="0" max="24" value="8">
+                    </label>
+                    <label>
+                        <span>margin: <strong id="val-margin">24px</strong></span>
+                        <input type="range" id="ctrl-margin" min="0" max="64" value="24">
+                    </label>
+                    <p class="formula" id="box-formula"></p>
+                </form>
+            </div>
+        </section>
+
+        <section id="padding" class="section">
+            <h2>2. <code>padding</code>: espacio interno</h2>
+            <p>
+                El padding aleja el contenido del borde <strong>sin</strong> separar la caja de sus vecinas.
+                Sin padding, el texto queda pegado al fondo. Con padding, la caja respira por dentro.
+            </p>
+
+            <div class="compare-row">
+                <article class="demo-card">
+                    <h3>Sin padding</h3>
+                    <div class="demo-padding is-tight">El texto está pegado al borde.</div>
+                </article>
+                <article class="demo-card">
+                    <h3>Con <code>padding: 1.5rem</code></h3>
+                    <div class="demo-padding is-airy">El texto está separado del borde. El fondo cubre ese aire.</div>
+                </article>
+            </div>
+
+            <pre><code>padding: 16px;                 /* los cuatro lados */
+padding: 16px 24px;            /* vertical | horizontal */
+padding: 8px 16px 24px;        /* arriba | horizontal | abajo */
+padding: 8px 16px 24px 32px;   /* arriba | derecha | abajo | izquierda */</code></pre>
+            <p>El atajo recorre el sentido horario, empezando arriba. El padding <strong>no puede ser negativo</strong>.</p>
+        </section>
+
+        <section id="border" class="section">
+            <h2>3. <code>border</code>: el borde</h2>
+            <p>
+                Hace falta <code>border-style</code> para que se vea. Si falta el estilo,
+                el ancho y el color no alcanzan.
+            </p>
+            <pre><code>.tarjeta {
+    border: 2px solid #2b6cb0;
+}</code></pre>
+
+            <div class="border-gallery">
+                <div class="border-sample" style="border-style: solid;">solid</div>
+                <div class="border-sample" style="border-style: dashed;">dashed</div>
+                <div class="border-sample" style="border-style: dotted;">dotted</div>
+                <div class="border-sample" style="border-style: double;">double</div>
+                <div class="border-sample is-radius">radius 12px</div>
+                <div class="border-sample is-circle">50%</div>
+            </div>
+
+            <aside class="callout callout-alert">
+                <p class="callout-title">Un solo lado + padding</p>
+                <p>Este recuadro usa exactamente el patrón de la clase: <code>border-left</code> y <code>padding-left</code> para que el texto no tape la línea.</p>
+            </aside>
+        </section>
+
+        <section id="margin" class="section">
+            <h2>4. <code>margin</code>: espacio externo</h2>
+            <p>
+                El margin separa cajas entre sí. No empuja el contenido hacia adentro:
+                aleja un elemento de los demás. Con <code>margin: 0 auto</code> y un ancho definido,
+                la caja se centra.
+            </p>
+
+            <div class="center-demo">
+                <div class="centered-box">
+                    <code>width: 70%</code> + <code>margin: 0 auto</code>
+                </div>
+            </div>
+
+            <h3>Colapso de márgenes verticales</h3>
+            <p>
+                Entre dos bloques, los márgenes superior e inferior <strong>no siempre se suman</strong>.
+                En flujo normal suele ganar el mayor. Eso se llama <em>margin collapsing</em>.
+            </p>
+
+            <div class="collapse-demo">
+                <div class="collapse-box">
+                    <code>margin-bottom: 40px</code>
+                </div>
+                <div class="collapse-box">
+                    <code>margin-top: 24px</code>
+                </div>
+                <p class="collapse-note">
+                    Lo esperado si se sumaran: <strong>64px</strong>.
+                    Lo que suele verse: <strong>40px</strong> (gana el mayor).
+                </p>
+            </div>
+        </section>
+
+        <section id="decidir" class="section">
+            <h2>5. ¿Padding o margin?</h2>
+            <p class="rule">
+                Si el espacio debe llevar el <strong>mismo fondo</strong> que el elemento, es padding.
+                Si el espacio debe ser <strong>calle</strong> entre elementos, es margin.
+            </p>
+
+            <div class="compare-row">
+                <article class="demo-card">
+                    <h3>Padding: el fondo viaja con el aire</h3>
+                    <div class="choice-stage">
+                        <div class="choice-box has-padding">Texto con padding</div>
+                    </div>
+                </article>
+                <article class="demo-card">
+                    <h3>Margin: calle transparente</h3>
+                    <div class="choice-stage">
+                        <div class="choice-box has-margin">Texto con margin</div>
+                    </div>
+                </article>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <caption>Regla rápida</caption>
+                    <thead>
+                        <tr>
+                            <th>Necesidad</th>
+                            <th>Usar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>El texto no debe pegarse al fondo de color</td>
+                            <td><code>padding</code></td>
+                        </tr>
+                        <tr>
+                            <td>Separar dos tarjetas vecinas</td>
+                            <td><code>margin</code></td>
+                        </tr>
+                        <tr>
+                            <td>Un botón con área de clic holgada</td>
+                            <td><code>padding</code></td>
+                        </tr>
+                        <tr>
+                            <td>Centrar un contenedor</td>
+                            <td><code>margin: 0 auto</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="box-sizing" class="section">
+            <h2>6. Ancho, alto y <code>box-sizing</code></h2>
+            <p>
+                Por defecto (<code>content-box</code>), <code>width</code> es solo el contenido.
+                Padding y border se <strong>suman</strong> afuera. Por eso dos columnas de
+                <code>50%</code> pueden no entrar en una fila.
+            </p>
+            <p>
+                Con <code>border-box</code>, <code>width</code> ya incluye padding y borde.
+                En esta materia se usa en todos los proyectos.
+            </p>
+
+            <pre><code>*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}</code></pre>
+
+            <div class="sizing-demo">
+                <p class="sizing-formula">
+                    Ambas cajas piden <code>width: 220px</code>,
+                    <code>padding: 20px</code> y <code>border: 10px</code>.
+                </p>
+                <div class="sizing-row">
+                    <div>
+                        <h3>content-box</h3>
+                        <p class="sizing-result">Ocupa 220 + 40 + 20 = <strong>280px</strong></p>
+                        <div class="sizing-track">
+                            <div class="sizing-box is-content">220px de contenido</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>border-box</h3>
+                        <p class="sizing-result">Ocupa <strong>220px</strong> en total</p>
+                        <div class="sizing-track">
+                            <div class="sizing-box is-border">220px incluye todo</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="inspeccionar" class="section">
+            <h2>7. Cómo inspeccionar el modelo de caja</h2>
+            <ol class="steps">
+                <li>Clic derecho sobre un elemento → <strong>Inspeccionar</strong>.</li>
+                <li>En <em>Computed</em> aparece el gráfico del box model.</li>
+                <li>Al pasar el cursor, el navegador colorea margin, border, padding y content.</li>
+            </ol>
+            <p>Si una caja “no entra”, casi siempre el padding o el borde están sumando ancho, o un margin está empujando el layout.</p>
+        </section>
+
+        <section id="responsive" class="section">
+            <p class="kicker">Parte B · Diseño responsive</p>
+            <h2>8. ¿Qué es diseño responsive?</h2>
+            <p>
+                <strong>Una misma página</strong> se reorganiza según el tamaño de la pantalla.
+                No es un sitio aparte para celular: es un layout que fluye.
+            </p>
+            <ul>
+                <li>Evita texto ilegible o recortado.</li>
+                <li>Evita columnas de escritorio imposibles de usar en un teléfono.</li>
+                <li>Evita imágenes que fuerzan scroll horizontal.</li>
+                <li>Deja botones y menús usables con el dedo.</li>
+            </ul>
+            <aside class="callout">
+                <p class="callout-title">Pregunta disparadora</p>
+                <p>¿Responsive es lo mismo que “se ve bien en el celular”? Es una parte. También hay que pensar tablets y pantallas grandes. Por eso trabajamos <strong>mobile-first</strong>.</p>
+            </aside>
+        </section>
+
+        <section id="viewport" class="section">
+            <h2>9. El viewport</h2>
+            <p>
+                Sin la meta etiqueta, muchos celulares simulan un escritorio de ~980px y luego
+                <strong>escalan</strong> todo: el sitio se ve chico y hay que hacer zoom.
+                Miren el chip de arriba a la derecha: muestra el ancho real de esta ventana.
+            </p>
+            <pre><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code></pre>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parte</th>
+                            <th>Significado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>width=device-width</code></td>
+                            <td>El ancho de diseño coincide con el del dispositivo</td>
+                        </tr>
+                        <tr>
+                            <td><code>initial-scale=1.0</code></td>
+                            <td>No hay zoom inicial</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="estrategias" class="section">
+            <h2>10. El responsive no empieza por las media queries</h2>
+            <p>Empieza por no fijar todo en píxeles.</p>
+            <div class="strategy-grid">
+                <article class="strategy-card">
+                    <h3>Layout fluido</h3>
+                    <pre><code>.contenedor {
+  width: 90%;
+  max-width: 960px;
+  margin: 0 auto;
+}</code></pre>
+                </article>
+                <article class="strategy-card">
+                    <h3>Imágenes fluidas</h3>
+                    <pre><code>img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}</code></pre>
+                    <div class="fluid-placeholder" role="img" aria-label="Imagen de ejemplo que nunca desborda">
+                        Imagen 1200px → <code>max-width: 100%</code>
+                    </div>
+                </article>
+                <article class="strategy-card">
+                    <h3>Unidades relativas</h3>
+                    <p><code>rem</code> para tipografía. <code>%</code> o <code>max-width</code> para anchos. <code>px</code> rígidos en columnas suelen romper el diseño.</p>
+                </article>
+                <article class="strategy-card">
+                    <h3>Área táctil</h3>
+                    <a class="boton" href="#simulador">Botón con padding holgado</a>
+                </article>
+            </div>
+        </section>
+
+        <section id="media" class="section">
+            <h2>11. Media queries y 12. Mobile-first</h2>
+            <p>
+                Una media query aplica CSS <strong>solo si</strong> se cumple una condición.
+                Mobile-first: se escribe primero el CSS de la pantalla chica y se agrega
+                complejidad con <code>min-width</code>.
+            </p>
+            <pre><code>/* Base: una columna */
+.columnas { display: block; }
+
+@media (min-width: 768px) {
+    .columnas { display: flex; gap: 1.5rem; }
+}</code></pre>
+            <div class="table-wrap">
+                <table>
+                    <caption>Puntos de corte orientativos</caption>
+                    <thead>
+                        <tr>
+                            <th>Ancho</th>
+                            <th>Referencia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>menos de 768px</td>
+                            <td>Celular</td>
+                        </tr>
+                        <tr>
+                            <td>768px – 1023px</td>
+                            <td>Tablet</td>
+                        </tr>
+                        <tr>
+                            <td>1024px o más</td>
+                            <td>Escritorio</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>El contenido dicta el corte: se ensancha la ventana hasta que el layout se rompe, y ahí se escribe la query.</p>
+        </section>
+
+        <section id="simulador" class="section">
+            <p class="kicker">Para proyectar en clase</p>
+            <h2>Simulador: una página, tres anchos</h2>
+            <p>
+                No hace falta achicar el proyector. Estos botones cambian el ancho del “dispositivo”
+                y el mini-sitio se reorganiza (una columna en celular, menú y tarjetas en fila después).
+            </p>
+            <div class="device-toolbar">
+                <button type="button" class="device-btn is-active" data-width="360">Celular 360</button>
+                <button type="button" class="device-btn" data-width="768">Tablet 768</button>
+                <button type="button" class="device-btn" data-width="1024">Escritorio 1024</button>
+                <span class="device-readout">Ancho del demo: <strong id="demo-width">360px</strong></span>
+            </div>
+            <div class="device-stage">
+                <div class="device-screen" id="device-screen">
+                    <div class="mini-site">
+                        <header class="mini-header">
+                            <strong>Ficha del curso</strong>
+                            <nav class="mini-nav">
+                                <a href="#simulador">Inicio</a>
+                                <a href="#simulador">Temas</a>
+                                <a href="#simulador">Contacto</a>
+                            </nav>
+                        </header>
+                        <div class="mini-cols">
+                            <article class="mini-card">
+                                <h3>HTML</h3>
+                                <p>Estructura y contenido del documento.</p>
+                            </article>
+                            <article class="mini-card">
+                                <h3>CSS</h3>
+                                <p>Presentación visual y distribución.</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="hint">Esta página también es responsive de verdad: achiquen la ventana del navegador y miren el chip del viewport.</p>
+        </section>
+
+        <section id="integrado" class="section">
+            <h2>13. Ejemplo integrado (esta misma página)</h2>
+            <p>Estas tarjetas usan el patrón de la clase: una columna en móvil, dos a partir de 768px, con padding interno y margen entre ellas.</p>
+            <div class="columnas">
+                <article class="tarjeta">
+                    <h3>HTML</h3>
+                    <p>Estructura y contenido del documento.</p>
+                </article>
+                <article class="tarjeta">
+                    <h3>CSS</h3>
+                    <p>Presentación visual y distribución.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="probar" class="section">
+            <h2>14. Cómo probar y 15. Errores frecuentes</h2>
+            <ol class="steps">
+                <li>Abrir la página en el navegador (no alcanza con el preview chico del editor).</li>
+                <li>F12 → modo dispositivo. Probar 360, 768 y 1280.</li>
+                <li>Comprobar que no haya scroll horizontal.</li>
+                <li>Leer el texto y tocar los botones: tienen que seguir siendo usables.</li>
+            </ol>
+            <ul class="error-list">
+                <li>Olvidar la meta <code>viewport</code>.</li>
+                <li>Poner <code>width: 1200px</code> al body o a las columnas.</li>
+                <li>Imágenes sin <code>max-width: 100%</code>.</li>
+                <li>Quedarse en <code>content-box</code> y no entender por qué 50% + 50% no entra.</li>
+                <li>Confundir padding con margin y “arreglar” espacios a ciegas.</li>
+                <li>Mezclar <code>min-width</code> y <code>max-width</code> sin criterio.</li>
+            </ul>
+        </section>
+
+        <section id="actividad" class="section">
+            <h2>16. Actividad práctica</h2>
+            <p>Tomar la ficha personal y convertirla en una página responsive. Entrega: <code>index.html</code> + <code>styles.css</code>.</p>
+            <div class="checklist">
+                <h3>Modelo de caja</h3>
+                <ul>
+                    <li><code>box-sizing: border-box</code> en todos los elementos.</li>
+                    <li>Contenedor centrado: <code>width: 90%</code>, <code>max-width</code>, <code>margin: 0 auto</code>.</li>
+                    <li>Un bloque con fondo donde se note padding vs margin.</li>
+                    <li>Borde visible en tarjetas o formulario.</li>
+                    <li>Imágenes fluidas.</li>
+                </ul>
+                <h3>Responsive</h3>
+                <ul>
+                    <li>Meta viewport presente.</li>
+                    <li>Pantalla chica: una columna y navegación vertical.</li>
+                    <li>Desde 768px: dos columnas <strong>o</strong> menú en fila.</li>
+                    <li>Sin scroll horizontal en 360px.</li>
+                    <li>Media queries con <code>min-width</code> (mobile-first).</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="preguntas" class="section">
+            <h2>17. Preguntas de cierre</h2>
+            <ol class="questions">
+                <li>
+                    <details>
+                        <summary>¿Qué parte del modelo de caja hereda el color de fondo: padding o margin?</summary>
+                        <p>El <strong>padding</strong>. El margin es transparente y deja ver el fondo del padre.</p>
+                    </details>
+                </li>
+                <li>
+                    <details>
+                        <summary>¿Por qué dos cajas con <code>width: 50%</code> pueden no entrar en una misma fila?</summary>
+                        <p>En <code>content-box</code> el padding y el border se suman al 50%. El total supera el 100%.</p>
+                    </details>
+                </li>
+                <li>
+                    <details>
+                        <summary>¿Qué problema concreto resuelve <code>box-sizing: border-box</code>?</summary>
+                        <p>Hace que <code>width</code> incluya padding y borde, así el tamaño pedido es el tamaño real de la caja.</p>
+                    </details>
+                </li>
+                <li>
+                    <details>
+                        <summary>¿Qué ocurre en un celular si falta la meta viewport?</summary>
+                        <p>El navegador simula un escritorio ancho y escala la página: se ve pequeña y hay que hacer zoom. Las media queries no se comportan como se espera.</p>
+                    </details>
+                </li>
+                <li>
+                    <details>
+                        <summary>¿Qué diferencia hay entre <code>min-width</code> y <code>max-width</code>?</summary>
+                        <p><code>min-width</code> agrega estilos desde cierto ancho hacia arriba (mobile-first). <code>max-width</code> aplica solo por debajo de un tope (desktop-first).</p>
+                    </details>
+                </li>
+                <li>
+                    <details>
+                        <summary>Si el espacio entre dos títulos “no se suma”, ¿qué puede estar pasando?</summary>
+                        <p>Colapso de márgenes verticales: entre bloques en flujo normal suele quedar el mayor, no la suma.</p>
+                    </details>
+                </li>
+            </ol>
+        </section>
+
+        <section id="recursos" class="section">
+            <h2>18. Material de consulta</h2>
+            <ul>
+                <li><a href="https://developer.mozilla.org/es/docs/Learn_web_development/Core/Styling_basics/Box_model">MDN · Modelo de caja</a></li>
+                <li><a href="https://developer.mozilla.org/es/docs/Web/CSS/margin">MDN · margin</a>, <a href="https://developer.mozilla.org/es/docs/Web/CSS/padding">padding</a>, <a href="https://developer.mozilla.org/es/docs/Web/CSS/border">border</a></li>
+                <li><a href="https://developer.mozilla.org/es/docs/Learn_web_development/Core/CSS_layout/Responsive_Design">MDN · Diseño responsive</a></li>
+                <li><a href="https://developer.mozilla.org/es/docs/Web/CSS/CSS_media_queries/Using_media_queries">MDN · Media queries</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Clase 5 · Introducción a la Programación Web · HTML en un archivo, CSS en otro.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
