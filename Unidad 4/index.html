@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unidad 4 — Introducción a JavaScript</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-bar">
+            <p class="eyebrow">Introducción a la Programación Web · Unidad 4</p>
+            <h1>JavaScript: la lógica de la página</h1>
+            <p class="header-lead">
+                HTML describe la estructura y CSS describe cómo se ve.
+                JavaScript es el lenguaje con el que la página calcula, reacciona y toma decisiones.
+            </p>
+        </div>
+        <nav class="site-nav" aria-label="Secciones de la clase">
+            <a href="#objetivos">Objetivos</a>
+            <a href="#que-es">Qué es</a>
+            <a href="#donde">Dónde va</a>
+            <a href="#mostrar">Mostrar</a>
+            <a href="#sentencias">Sentencias</a>
+            <a href="#sintaxis">Sintaxis</a>
+            <a href="#comentarios">Comentarios</a>
+            <a href="#variables">Variables</a>
+            <a href="#operadores">Operadores</a>
+            <a href="#aritmeticos">Aritméticos</a>
+            <a href="#asignacion">Asignación</a>
+            <a href="#tipos">Tipos</a>
+            <a href="#funciones">Funciones</a>
+            <a href="#practica">Práctica</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="objetivos" class="section">
+            <p class="kicker">Antes de empezar</p>
+            <h2>Objetivos de la clase</h2>
+            <p>Al final de esta clase deberían poder hacer esto con un ejemplo chico, en el navegador:</p>
+            <ul class="objective-list">
+                <li>Explicar qué aporta JavaScript al lado de HTML y CSS.</li>
+                <li>Ubicar un <code>&lt;script&gt;</code> en la página y en un archivo externo.</li>
+                <li>Mostrar un dato con <code>console.log</code>, <code>alert</code>, <code>innerHTML</code> y <code>document.write</code>, y saber qué hace cada uno.</li>
+                <li>Leer una sentencia y reconocer valores, operadores, expresiones, palabras clave y comentarios.</li>
+                <li>Declarar variables con <code>let</code> y <code>const</code>, y explicar <code>var</code> y una asignación sin palabra clave.</li>
+                <li>Usar operadores aritméticos y de asignación.</li>
+                <li>Reconocer los tipos de dato y el hecho de que una variable puede cambiar de tipo.</li>
+                <li>Definir una función y ejecutarla cuando un clic la invoca.</li>
+            </ul>
+        </section>
+
+        <section id="que-es" class="section">
+            <p class="kicker">Parte 1</p>
+            <h2>1. Qué es JavaScript</h2>
+            <p>
+                JavaScript es uno de los lenguajes más usados del mundo y es el lenguaje de programación de la Web.
+                El navegador lo ejecuta. Con él la página deja de ser un cartel fijo y pasa a tener comportamiento.
+            </p>
+            <div class="grid-3">
+                <article class="card">
+                    <p class="role role-html">HTML</p>
+                    <h3>La estructura</h3>
+                    <p>El cartel existe: un título, un texto, un botón.</p>
+                </article>
+                <article class="card">
+                    <p class="role role-css">CSS</p>
+                    <h3>La presentación</h3>
+                    <p>El verde de “abierto”, el rojo de “cerrado”, la tipografía.</p>
+                </article>
+                <article class="card">
+                    <p class="role role-js">JavaScript</p>
+                    <h3>El comportamiento</h3>
+                    <p>Al hacer clic, una función cambia el estado del kiosco.</p>
+                </article>
+            </div>
+
+            <div class="sign" id="cartel">
+                <p class="sign-state" id="estado-kiosco">ABIERTO</p>
+                <p id="detalle-kiosco">Hay café y medialunas.</p>
+                <button type="button" class="btn" id="btn-cartel" data-abierto="si">Cerrar el kiosco</button>
+            </div>
+            <aside class="callout">
+                <p class="callout-title">Para preguntar en clase</p>
+                <p>¿Qué parte del cartel vive en HTML, cuál en CSS y cuál acaba de cambiar por JavaScript?</p>
+            </aside>
+        </section>
+
+        <section id="donde" class="section">
+            <p class="kicker">Parte 2</p>
+            <h2>2. Dónde se escribe</h2>
+            <p>
+                El código va entre <code>&lt;script&gt;</code> y <code>&lt;/script&gt;</code>.
+                Hay tres lugares habituales. En esta materia el código de comportamiento vive en su propio archivo, igual que el CSS.
+            </p>
+            <div class="grid-3">
+                <article class="card">
+                    <h3>En el <code>&lt;head&gt;</code></h3>
+                    <p>El navegador lo encuentra temprano. Si en ese momento busca un botón del <code>&lt;body&gt;</code>, ese botón todavía no existe.</p>
+                </article>
+                <article class="card">
+                    <h3>Al final del <code>&lt;body&gt;</code></h3>
+                    <p>El HTML de arriba ya está armado. Esta página carga así <code>script.js</code>, para que los botones existan cuando el archivo corre.</p>
+                </article>
+                <article class="card">
+                    <h3>Archivo externo</h3>
+                    <p>La forma de trabajo de la materia. El HTML enlaza el archivo y el código se reutiliza.</p>
+                </article>
+            </div>
+            <pre><code>&lt;script src="script.js"&gt;&lt;/script&gt;</code></pre>
+            <aside class="callout">
+                <p class="callout-title">Funciones y eventos, en una frase</p>
+                <p>
+                    Una función es un bloque de código con nombre. Un evento es algo que ocurre en la página, por ejemplo un clic.
+                    El botón del cartel, al recibir el clic, invoca una función.
+                </p>
+            </aside>
+        </section>
+
+        <section id="mostrar" class="section">
+            <p class="kicker">Parte 3</p>
+            <h2>3. Cuatro formas de mostrar un dato</h2>
+            <p>El mismo pedido se puede comunicar de cuatro maneras. Cada una llega a un lugar distinto.</p>
+
+            <div class="demo-grid">
+                <article class="demo-card">
+                    <h3><code>console.log()</code></h3>
+                    <p>Escribe en la consola del navegador. Esta caja la imita, y el mismo texto sale en la consola real (F12 o Ctrl+Shift+J).</p>
+                    <div class="btn-row">
+                        <button type="button" class="btn" id="btn-log">Registrar el pedido</button>
+                        <button type="button" class="btn btn-light" id="btn-limpiar-log">Limpiar</button>
+                    </div>
+                    <div class="console" id="consola" aria-live="polite"></div>
+                </article>
+
+                <article class="demo-card">
+                    <h3><code>window.alert()</code></h3>
+                    <p>Abre un cuadro del navegador. La página queda frenada hasta que se acepta. <code>alert()</code> es la misma función, guardada en <code>window</code>.</p>
+                    <button type="button" class="btn" id="btn-alert">Avisar que el pedido está listo</button>
+                    <p class="hint">Avísenle a la clase antes de hacer clic: va a aparecer un cuadro modal.</p>
+                </article>
+
+                <article class="demo-card">
+                    <h3><code>innerHTML</code> y <code>textContent</code></h3>
+                    <p><code>innerHTML</code> escribe dentro de un elemento e interpreta etiquetas. <code>textContent</code> escribe el texto tal cual.</p>
+                    <div class="btn-row">
+                        <button type="button" class="btn" id="btn-inner">innerHTML</button>
+                        <button type="button" class="btn btn-light" id="btn-text">textContent</button>
+                    </div>
+                    <div class="ticket" id="salida-html">
+                        <p>El ticket aparece acá.</p>
+                    </div>
+                </article>
+
+                <article class="demo-card">
+                    <h3><code>document.write()</code></h3>
+                    <p>Escribe en el documento. Si la página ya cargó, reemplaza el documento entero. Por eso la prueba vive en una mini página, y esta clase sigue en su lugar.</p>
+                    <div class="btn-row">
+                        <button type="button" class="btn" id="btn-write">Escribir el ticket</button>
+                        <button type="button" class="btn btn-light" id="btn-write-pisar">Reemplazar todo</button>
+                        <button type="button" class="btn btn-light" id="btn-write-reset">Volver al original</button>
+                    </div>
+                    <iframe class="write-frame" id="marco-write" title="Mini página para probar document.write"></iframe>
+                </article>
+            </div>
+        </section>
+
+        <section id="sentencias" class="section">
+            <p class="kicker">Parte 4</p>
+            <h2>4. Sentencias y declaraciones</h2>
+            <p>
+                Un programa es una lista de instrucciones. En un lenguaje, esas instrucciones se llaman <strong>sentencias</strong>.
+                Una declaración arma un dato con valores, operadores, expresiones, palabras clave y comentarios.
+            </p>
+            <p class="anatomy" aria-hidden="true">
+                <span class="tok tok-key">let</span>
+                <span class="tok tok-name">total</span>
+                <span class="tok tok-op">=</span>
+                <span class="tok tok-name">precio</span>
+                <span class="tok tok-op">*</span>
+                <span class="tok tok-num">2</span>
+                <span class="tok tok-comment">// dos cafés</span>
+            </p>
+            <ul class="legend">
+                <li><span class="tok tok-key">let</span> palabra clave</li>
+                <li><span class="tok tok-name">total</span> nombre</li>
+                <li><span class="tok tok-op">=</span> <span class="tok tok-op">*</span> operadores</li>
+                <li><span class="tok tok-name">precio</span> <span class="tok tok-op">*</span> <span class="tok tok-num">2</span> expresión</li>
+                <li><span class="tok tok-comment">//</span> comentario</li>
+            </ul>
+            <div class="table-wrap">
+                <table>
+                    <caption>Las piezas de una declaración</caption>
+                    <thead>
+                        <tr>
+                            <th>Pieza</th>
+                            <th>En el ejemplo</th>
+                            <th>Qué es</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Valor</td>
+                            <td><code>2</code>, <code>"café"</code>, <code>true</code></td>
+                            <td>Un dato literal: número, texto o sí/no.</td>
+                        </tr>
+                        <tr>
+                            <td>Operador</td>
+                            <td><code>=</code>, <code>*</code></td>
+                            <td>Un símbolo que opera: guarda, suma, multiplica.</td>
+                        </tr>
+                        <tr>
+                            <td>Expresión</td>
+                            <td><code>precio * 2</code></td>
+                            <td>Un trozo que produce un valor.</td>
+                        </tr>
+                        <tr>
+                            <td>Palabra clave</td>
+                            <td><code>let</code>, <code>const</code>, <code>function</code>, <code>return</code></td>
+                            <td>Una palabra con un significado fijo en el lenguaje.</td>
+                        </tr>
+                        <tr>
+                            <td>Comentario</td>
+                            <td><code>// dos cafés</code></td>
+                            <td>Una nota para quien lee. El navegador la saltea.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="sintaxis" class="section">
+            <p class="kicker">Parte 5</p>
+            <h2>5. Sintaxis</h2>
+            <p>La sintaxis es la forma correcta de escribir. Estas reglas evitan los errores típicos de la primera clase.</p>
+            <div class="grid-2">
+                <article class="card">
+                    <h3>Mayúsculas y minúsculas</h3>
+                    <p><code>total</code> y <code>Total</code> son dos nombres distintos. <code>let</code> va en minúscula. <code>Let</code> es un error.</p>
+                </article>
+                <article class="card">
+                    <h3>Nombres</h3>
+                    <p>Letras, dígitos, <code>_</code> y <code>$</code>. El primer carácter es una letra, <code>_</code> o <code>$</code>. Un nombre puede ser <code>precioCafe</code>.</p>
+                </article>
+                <article class="card">
+                    <h3>Punto y coma y espacios</h3>
+                    <p>El <code>;</code> cierra la sentencia. Conviene escribirlo. Los espacios y los saltos de línea ordenan la lectura; el navegador igual entiende el código si están bien puestos los símbolos.</p>
+                </article>
+                <article class="card">
+                    <h3>Textos y bloques</h3>
+                    <p>El texto va entre comillas: <code>"El Break"</code>. Un bloque de varias líneas va entre llaves <code>{ }</code>.</p>
+                </article>
+            </div>
+            <aside class="callout">
+                <p><code>=</code> guarda un valor en una variable. Para preguntar si dos valores son iguales vamos a usar <code>===</code> cuando la página tenga que decidir.</p>
+            </aside>
+            <h3>¿Esta línea está bien escrita?</h3>
+            <div class="grid-2">
+                <article class="card" data-sintaxis="ok" data-ok="Sí. const, un nombre válido y un texto entre comillas." data-bad="Está bien escrita. const declara, el nombre es válido y el texto tiene comillas.">
+                    <pre><code>const kiosco = "El Break";</code></pre>
+                    <div class="btn-row">
+                        <button type="button" class="btn btn-light" data-juicio="ok">Válida</button>
+                        <button type="button" class="btn btn-light" data-juicio="error">Con error</button>
+                    </div>
+                    <p class="feedback" hidden></p>
+                </article>
+                <article class="card" data-sintaxis="error" data-ok="Exacto. Let con mayúscula es un error: la palabra clave es let." data-bad="Tiene un error. La palabra clave se escribe let, en minúscula.">
+                    <pre><code>Let stock = 12;</code></pre>
+                    <div class="btn-row">
+                        <button type="button" class="btn btn-light" data-juicio="ok">Válida</button>
+                        <button type="button" class="btn btn-light" data-juicio="error">Con error</button>
+                    </div>
+                    <p class="feedback" hidden></p>
+                </article>
+                <article class="card" data-sintaxis="error" data-ok="Exacto. Un nombre no puede empezar con un número." data-bad="Tiene un error. 1erPedido empieza con un dígito. Un nombre válido sería primerPedido.">
+                    <pre><code>let 1erPedido = 2;</code></pre>
+                    <div class="btn-row">
+                        <button type="button" class="btn btn-light" data-juicio="ok">Válida</button>
+                        <button type="button" class="btn btn-light" data-juicio="error">Con error</button>
+                    </div>
+                    <p class="feedback" hidden></p>
+                </article>
+                <article class="card" data-sintaxis="ok" data-ok="Sí. El punto y coma se puede omitir. En la materia lo escribimos igual, para ver dónde termina cada sentencia." data-bad="Está bien escrita. El punto y coma es opcional en esta línea. Igual vamos a usarlo.">
+                    <pre><code>let total = 1800 * 2</code></pre>
+                    <div class="btn-row">
+                        <button type="button" class="btn btn-light" data-juicio="ok">Válida</button>
+                        <button type="button" class="btn btn-light" data-juicio="error">Con error</button>
+                    </div>
+                    <p class="feedback" hidden></p>
+                </article>
+            </div>
+        </section>
+
+        <section id="comentarios" class="section">
+            <p class="kicker">Parte 6</p>
+            <h2>6. Comentarios</h2>
+            <p>Un comentario explica el porqué. El navegador no lo ejecuta. Hay dos formas.</p>
+            <pre><code>// Una sola línea: el segundo café va a mitad de precio los jueves.
+
+/*
+  Varias líneas: precios de muestra para la clase.
+  Café 1800. Medialuna 900.
+*/</code></pre>
+            <div class="grid-2">
+                <article class="card">
+                    <h3>Comentario que repite el código</h3>
+                    <pre><code>total = total + 900; // suma 900</code></pre>
+                </article>
+                <article class="card">
+                    <h3>Comentario que aporta contexto</h3>
+                    <pre><code>total = total + 900; // se agregó una medialuna</code></pre>
+                </article>
+            </div>
+            
+
+        <section id="variables" class="section">
+            <p class="kicker">Parte 7</p>
+            <h2>7. Variables</h2>
+            <p>Una variable es un nombre para un valor que el programa necesita recordar. En JavaScript hay cuatro formas de crearlas.</p>
+            <div class="table-wrap">
+                <table>
+                    <caption>Cómo se declara</caption>
+                    <thead>
+                        <tr>
+                            <th>Forma</th>
+                            <th>Ejemplo del kiosco</th>
+                            <th>Qué conviene recordar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>let</code></td>
+                            <td><code>let stock = 12;</code></td>
+                            <td>Se puede reasignar. Vive dentro del bloque <code>{ }</code> donde se declaró. Es la opción habitual cuando el valor cambia.</td>
+                        </tr>
+                        <tr>
+                            <td><code>const</code></td>
+                            <td><code>const kiosco = "El Break";</code></td>
+                            <td>El nombre queda atado a ese valor: reasignarlo produce un error. Sirve para nombres que en el programa se mantienen.</td>
+                        </tr>
+                        <tr>
+                            <td><code>var</code></td>
+                            <td><code>var legacy = 1;</code></td>
+                            <td>Es la forma histórica. Se puede redeclarar y su alcance es la función entera, también adentro de un bloque. En código nuevo usamos <code>let</code> y <code>const</code>.</td>
+                        </tr>
+                        <tr>
+                            <td>Sin palabra clave</td>
+                            <td><code>precio = 1800;</code></td>
+                            <td>En modo normal crea una variable global, visible en toda la página. Con <code>"use strict"</code> la línea lanza un error. Siempre declaramos.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="operadores" class="section">
+            <p class="kicker">Parte 8</p>
+            <h2>8. Operadores</h2>
+            <p>Un operador es un símbolo que produce un resultado a partir de valores. Estos son los grupos que van a aparecer en la materia.</p>
+            <div class="table-wrap">
+                <table>
+                    <caption>Mapa corto</caption>
+                    <thead>
+                        <tr>
+                            <th>Grupo</th>
+                            <th>Ejemplos</th>
+                            <th>En el kiosco</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Aritméticos</td>
+                            <td><code>+ − * / % **</code></td>
+                            <td>Calcular el total, el vuelto o las cajas.</td>
+                        </tr>
+                        <tr>
+                            <td>Asignación</td>
+                            <td><code>= += -= *= /=</code></td>
+                            <td>Guardar el total o descontar stock.</td>
+                        </tr>
+                        <tr>
+                            <td>Comparación</td>
+                            <td><code>=== !== &gt; &lt;</code></td>
+                            <td>Los usamos cuando la página tenga que decidir.</td>
+                        </tr>
+                        <tr>
+                            <td>Lógicos</td>
+                            <td><code>&amp;&amp; || !</code></td>
+                            <td>Combinar condiciones. Por ejemplo, hay stock y el local está abierto.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="aritmeticos" class="section">
+            <p class="kicker">Parte 9</p>
+            <h2>9. Operadores aritméticos</h2>
+            <p>Operan con números. El decimal se escribe con punto: <code>2.4</code>. JavaScript tiene un solo tipo numérico: <code>2</code> y <code>2.4</code> son <code>number</code>.</p>
+            <div class="table-wrap">
+                <table>
+                    <caption>Los que usamos hoy</caption>
+                    <thead>
+                        <tr>
+                            <th>Operador</th>
+                            <th>Nombre</th>
+                            <th>Ejemplo</th>
+                            <th>Resultado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>+</code></td><td>Suma</td><td><code>1800 + 900</code></td><td>2700</td></tr>
+                        <tr><td><code>-</code></td><td>Resta</td><td><code>5000 - 2700</code></td><td>2300</td></tr>
+                        <tr><td><code>*</code></td><td>Multiplicación</td><td><code>1800 * 2</code></td><td>3600</td></tr>
+                        <tr><td><code>/</code></td><td>División</td><td><code>12 / 5</code></td><td>2.4</td></tr>
+                        <tr><td><code>%</code></td><td>Resto</td><td><code>12 % 5</code></td><td>2</td></tr>
+                        <tr><td><code>**</code></td><td>Potencia</td><td><code>2 ** 3</code></td><td>8</td></tr>
+                        <tr><td><code>++</code> <code>--</code></td><td>Sumar o restar 1</td><td><code>stock++</code></td><td>el stock más uno</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>La cuenta del pedido</h3>
+            <p>La multiplicación se resuelve antes que la suma: <code>precio * cantidad</code> de cada producto, y después se suman.</p>
+            <div class="grid-2">
+                <div>
+                    <label class="field">Cafés a $1800
+                        <input type="number" id="cafes" min="0" value="2">
+                    </label>
+                    <label class="field">Medialunas a $900
+                        <input type="number" id="medialunas" min="0" value="3">
+                    </label>
+                </div>
+                <div>
+                    <p class="formula" id="formula-cuenta"></p>
+                    <p class="result-big" id="total-cuenta"></p>
+                </div>
+            </div>
+
+            <h3>Los paréntesis cambian el orden</h3>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-prec-1">2 + 3 * 4</button>
+                <button type="button" class="btn" id="btn-prec-2">(2 + 3) * 4</button>
+                <button type="button" class="btn btn-light" id="btn-mas-texto">"2" + 2 y "2" * 2</button>
+            </div>
+            <p class="salida" id="salida-prec" aria-live="polite">Elijan una cuenta.</p>
+            <aside class="callout">
+                <p>El <code>+</code> hace dos trabajos. Entre números, suma. Si alguno de los dos es texto, los une. Por eso <code>"2" + 2</code> da el texto <code>"22"</code>, y <code>"2" * 2</code> da el número <code>4</code>.</p>
+            </aside>
+
+            <h3>El resto: medialunas que no llenan una caja</h3>
+            <p><code>%</code> devuelve lo que sobra de una división entera. <code>/</code> dice cuántas cajas, contando la fracción.</p>
+            <div class="grid-2">
+                <div>
+                    <label class="field">Medialunas
+                        <input type="number" id="unidades" min="0" value="12">
+                    </label>
+                    <label class="field">Entran por caja
+                        <input type="number" id="por-caja" min="1" value="5">
+                    </label>
+                </div>
+                <p class="salida" id="salida-cajas" aria-live="polite"></p>
+            </div>
+        </section>
+
+        <section id="asignacion" class="section">
+            <p class="kicker">Parte 10</p>
+            <h2>10. Operadores de asignación</h2>
+            <p>Guardan un valor en una variable. Los compuestos calculan y guardan en el mismo paso.</p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operador</th>
+                            <th>Ejemplo</th>
+                            <th>Equivale a</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>=</code></td><td><code>stock = 20</code></td><td>guardar 20</td></tr>
+                        <tr><td><code>+=</code></td><td><code>stock += 5</code></td><td><code>stock = stock + 5</code></td></tr>
+                        <tr><td><code>-=</code></td><td><code>stock -= 1</code></td><td><code>stock = stock - 1</code></td></tr>
+                        <tr><td><code>*=</code></td><td><code>stock *= 2</code></td><td><code>stock = stock * 2</code></td></tr>
+                        <tr><td><code>/=</code></td><td><code>stock /= 2</code></td><td><code>stock = stock / 2</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Stock inicial: <strong id="stock-valor">20</strong> medialunas.</p>
+            <div class="meter" aria-hidden="true"><span id="stock-bar"></span></div>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-vender">stock -= 1</button>
+                <button type="button" class="btn" id="btn-reponer">stock += 5</button>
+                <button type="button" class="btn btn-light" id="btn-mitad">stock /= 2</button>
+                <button type="button" class="btn btn-light" id="btn-incremento">stock++</button>
+            </div>
+            <p class="formula" id="stock-sentencia">let stock = 20;</p>
+        </section>
+
+        <section id="tipos" class="section">
+            <p class="kicker">Parte 11</p>
+            <h2>11. Tipos de datos</h2>
+            <p>
+                Una variable puede guardar un número, un texto, un sí/no, un objeto u otros valores.
+                JavaScript tiene tipos dinámicos: la misma variable puede pasar de un tipo a otro sin una declaración nueva.
+                <code>typeof</code> dice cuál es el tipo en ese momento.
+            </p>
+            <article class="card type-panel">
+                <p class="hint">Paso <span id="tipo-indice">1 / 6</span>. La variable se llama <code>dato</code> en todos los pasos.</p>
+                <p class="type-code" id="tipo-codigo">let dato = 1800;</p>
+                <p>Valor: <strong id="tipo-valor">1800</strong></p>
+                <p><code>typeof dato</code> → <span class="pill" id="tipo-typeof">number</span></p>
+                <p id="tipo-nota"></p>
+                <div class="btn-row">
+                    <button type="button" class="btn" id="btn-tipo-siguiente">Siguiente tipo</button>
+                    <button type="button" class="btn btn-light" id="btn-tipo-reiniciar">Volver al número</button>
+                </div>
+            </article>
+            <div class="grid-2">
+                <article class="card">
+                    <h3><code>undefined</code></h3>
+                    <p>La variable existe y todavía no tiene un valor guardado.</p>
+                    <pre><code>let cliente;</code></pre>
+                </article>
+                <article class="card">
+                    <h3><code>null</code></h3>
+                    <p>Hay un valor, y ese valor es “vacío” a propósito. Por ejemplo, todavía no se cargó un cliente.</p>
+                    <pre><code>let cliente = null;</code></pre>
+                </article>
+            </div>
+        </section>
+
+        <section id="funciones" class="section">
+            <p class="kicker">Parte 12</p>
+            <h2>12. Funciones</h2>
+            <p>
+                Una función es un bloque de código con una tarea. Se define con la palabra clave <code>function</code>,
+                un nombre y paréntesis. Los paréntesis pueden llevar parámetros, separados por comas.
+                La función corre cuando algo la invoca: otra línea, o un evento.
+            </p>
+            <pre><code>function cobrar(cafes, medialunas) {
+  const total = cafes * 1800 + medialunas * 900;
+  return total;
+}
+
+const importe = cobrar(2, 3);</code></pre>
+            <ul class="steps">
+                <li><code>cobrar</code> es el nombre. Puede llevar letras, dígitos, <code>_</code> y <code>$</code>.</li>
+                <li><code>cafes</code> y <code>medialunas</code> son los parámetros: los datos que llegan.</li>
+                <li><code>return</code> devuelve el total a quien la llamó.</li>
+                <li>La última línea es la invocación. Recién ahí se ejecuta el cálculo.</li>
+            </ul>
+            <p>
+                Esta página ya definió <code>cobrar</code> al cargar.
+                Invocaciones hasta ahora: <strong id="contador-invocaciones">0</strong>.
+            </p>
+            <div class="grid-2">
+                <div>
+                    <label class="field">Nombre
+                        <input type="text" id="fn-nombre" value="Ana" autocomplete="off">
+                    </label>
+                    <label class="field">Cafés
+                        <input type="number" id="fn-cafes" min="0" value="2">
+                    </label>
+                    <label class="field">Medialunas
+                        <input type="number" id="fn-medialunas" min="0" value="3">
+                    </label>
+                    <div class="btn-row">
+                        <button type="button" class="btn" id="btn-cobrar">Invocar cobrar</button>
+                        <button type="button" class="btn btn-light" id="btn-solo-definir">Solo mirar el contador</button>
+                    </div>
+                </div>
+                <p class="salida" id="fn-salida" aria-live="polite">El saludo y el total aparecen acá. El contador sube cuando la función se ejecuta.</p>
+            </div>
+            <aside class="callout callout-ok">
+                <p class="callout-title">El clic es el “algo” que la invoca</p>
+                <p>En <code>script.js</code>, el botón escucha el evento <code>click</code> y, dentro de esa función, llama a <code>cobrar</code>. Definir la función y apretar el botón son dos momentos distintos.</p>
+            </aside>
+        </section>
+
+        <section id="practica" class="section">
+            <p class="kicker">Para cerrar</p>
+            <h2>13. El programa completo</h2>
+            <p>Estas líneas juntan variables, operadores, una función y una salida en la página. El botón las ejecuta y también escribe en la consola de la sección 3.</p>
+            <pre><code>const kiosco = "El Break";
+let cafes = 2;
+let medialunas = 3;
+const total = cobrar(cafes, medialunas);
+console.log("Pedido en " + kiosco);
+console.log(total);</code></pre>
+            <button type="button" class="btn" id="btn-programa">Ejecutar el programa</button>
+            <article class="ticket" id="programa-ticket" aria-live="polite">
+                <h3>El Break</h3>
+                <p>El ticket se imprime al ejecutar.</p>
+            </article>
+
+            <h3>Completen los precios</h3>
+            <p>Un pedido de 2 cafés y 3 medialunas tiene que dar $6300. Carguen los precios y comprueben la expresión <code>2 * precioCafé + 3 * precioMedialuna</code>.</p>
+            <div class="grid-2">
+                <div>
+                    <label class="field">Precio del café
+                        <input type="number" id="prac-cafe" min="0" value="0">
+                    </label>
+                    <label class="field">Precio de la medialuna
+                        <input type="number" id="prac-medialuna" min="0" value="0">
+                    </label>
+                    <button type="button" class="btn" id="btn-practica">Calcular 2 y 3</button>
+                </div>
+                <p class="salida" id="salida-practica" aria-live="polite">El total aparece acá.</p>
+            </div>
+
+            <h3>Chequeo rápido</h3>
+            <p>
+                Seis preguntas de la clase. En el aula virtual queda la autoevaluación formativa del módulo, con el mismo recorrido.
+            </p>
+            <p class="score">Resultado: <span id="puntaje">0 de 6</span></p>
+            <p class="hint" id="puntaje-detalle">Todavía no hay respuestas.</p>
+
+            <article class="quiz-item" data-answer="logica" data-ok="Sí. JavaScript aporta el comportamiento y los cálculos." data-bad="JavaScript aporta la lógica: calcula, reacciona y decide. La estructura es HTML y la presentación es CSS.">
+                <h3>1. ¿Qué aporta JavaScript a la página?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="logica">Comportamiento y cálculos</button>
+                    <button type="button" class="btn btn-light" data-value="estructura">La estructura de títulos y párrafos</button>
+                    <button type="button" class="btn btn-light" data-value="color">El color y la tipografía</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="reemplaza" data-ok="Sí. Con la página ya cargada, document.write() reemplaza el documento." data-bad="Con la página ya cargada, document.write() reemplaza el documento entero. Para cambiar un elemento usamos innerHTML o textContent.">
+                <h3>2. Con la página ya cargada, ¿qué hace <code>document.write()</code>?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="reemplaza">Reemplaza el documento</button>
+                    <button type="button" class="btn btn-light" data-value="parrafo">Cambia solo un párrafo</button>
+                    <button type="button" class="btn btn-light" data-value="consola">Escribe en la consola</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="const" data-ok="Sí. const ata el nombre a ese valor." data-bad="Para un valor que no se reasigna, la declaración es const.">
+                <h3>3. El nombre del kiosco no se va a reasignar. ¿Con qué se declara?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="const">const</button>
+                    <button type="button" class="btn btn-light" data-value="var">var, porque es la forma actual</button>
+                    <button type="button" class="btn btn-light" data-value="nada">Sin palabra clave, para que sea global</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="dos" data-ok="Sí. 17 dividido 5 sobra 2." data-bad="17 % 5 es el resto de dividir 17 entre 5. Entran 3 veces 5, y sobran 2.">
+                <h3>4. ¿Cuánto es <code>17 % 5</code>?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="dos">2</button>
+                    <button type="button" class="btn btn-light" data-value="tres">3</button>
+                    <button type="button" class="btn btn-light" data-value="quince">85</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="catorce" data-ok="Sí. += suma y guarda: 10 + 4." data-bad="stock += 4 equivale a stock = stock + 4. El resultado es 14.">
+                <h3>5. Después de <code>let stock = 10; stock += 4;</code>, ¿cuánto vale <code>stock</code>?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="catorce">14</button>
+                    <button type="button" class="btn btn-light" data-value="cuatro">4</button>
+                    <button type="button" class="btn btn-light" data-value="texto">104</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="string" data-ok="Sí. La variable cambió de tipo. typeof devuelve string." data-bad="JavaScript permite guardar otro tipo en la misma variable. Al final dato es texto, y typeof vale string.">
+                <h3>6. <code>let dato = 1800; dato = "café";</code> ¿Qué devuelve <code>typeof dato</code>?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="string">"string"</button>
+                    <button type="button" class="btn btn-light" data-value="number">"number"</button>
+                    <button type="button" class="btn btn-light" data-value="error">Un error: el tipo no puede cambiar</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+            <button type="button" class="btn btn-light" id="btn-reiniciar-quiz">Reiniciar el chequeo</button>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Introducción a la Programación Web · Unidad 4 · Introducción a JavaScript</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
