@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unidad 4 — Objetos, clases y el DOM</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-bar">
+            <p class="eyebrow">Introducción a la Programación Web · Unidad 4 · Clases 10 y 11</p>
+            <h1>Objetos, clases y el DOM</h1>
+            <p class="header-lead">
+                Un objeto junta varios datos con nombre. Una clase es el molde para crear muchos objetos iguales.
+                El DOM es el árbol de la página, y los eventos son la forma de reaccionar.
+            </p>
+        </div>
+        <nav class="site-nav" aria-label="Secciones de la clase">
+            <a href="#objetivos">Objetivos</a>
+            <p class="nav-label">Clase 10 · Objetos</p>
+            <a href="#objetos">Objetos</a>
+            <a href="#eventos">Eventos</a>
+            <a href="#primitivos">Primitivos</a>
+            <a href="#constructores">Constructores</a>
+            <a href="#propiedades">Propiedades</a>
+            <a href="#metodos">Métodos</a>
+            <a href="#mostrar">Mostrar</a>
+            <a href="#accesores">Accesores</a>
+            <a href="#prototipos">Prototipos</a>
+            <a href="#es5">ES5</a>
+            <a href="#clases">Clases</a>
+            <a href="#herencia">Herencia</a>
+            <a href="#estaticos">Estáticos</a>
+            <p class="nav-label">Clase 11 · DOM</p>
+            <a href="#dom">DOM</a>
+            <a href="#acceso">Acceso</a>
+            <a href="#cambios">Cambiar</a>
+            <a href="#escucha">Escuchar</a>
+            <a href="#nodos">Nodos</a>
+            <a href="#practica">Práctica</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="objetivos" class="section">
+            <p class="kicker">Antes de empezar</p>
+            <h2>Objetivos</h2>
+            <p>Estas dos clases siguen a la introducción de JavaScript. Al terminar, con el kiosco como ejemplo, deberían poder:</p>
+            <h3>Clase 10. Objetos y clases</h3>
+            <ul class="objective-list">
+                <li>Crear un objeto con pares <code>nombre: valor</code> y leer sus propiedades.</li>
+                <li>Distinguir un valor primitivo de un objeto, y nombrar los 7 primitivos.</li>
+                <li>Crear objetos con una función constructora y con <code>new</code>.</li>
+                <li>Explicar a qué objeto apunta <code>this</code> cuando se llama un método.</li>
+                <li>Usar un getter y un setter al leer o escribir una propiedad.</li>
+                <li>Agregar un método al prototipo para que lo compartan los objetos de ese tipo.</li>
+                <li>Definir una clase, heredar con <code>extends</code> y llamar un método <code>static</code> sobre la clase.</li>
+            </ul>
+            <h3>Clase 11. El documento</h3>
+            <ul class="objective-list">
+                <li>Explicar qué arma el navegador cuando carga la página: el árbol del DOM.</li>
+                <li>Encontrar un elemento por id, etiqueta, clase, selector o colección.</li>
+                <li>Cambiar el contenido, el estilo y los nodos de la página.</li>
+                <li>Reaccionar a un evento con un atributo <code>onclick</code> y con <code>addEventListener</code>.</li>
+                <li>Distinguir una <code>HTMLCollection</code> viva de un <code>NodeList</code> fijo.</li>
+            </ul>
+        </section>
+
+        <section id="objetos" class="section">
+            <p class="kicker">Clase 10 · Parte 1</p>
+            <h2>1. Un objeto guarda muchos valores</h2>
+            <p>
+                Un objeto también se guarda en una variable. Adentro puede haber varios datos.
+                Cada dato es un par <strong>nombre: valor</strong>. El nombre y el valor se separan con dos puntos.
+            </p>
+            <pre><code>const producto = {
+  nombre: "café",
+  precio: 1800,
+  disponible: true
+};</code></pre>
+            <p><code>producto</code> es una variable. Adentro hay tres pares. <code>typeof producto</code> es <code>"object"</code>.</p>
+            <div class="btn-row">
+                <button type="button" class="btn" data-prop="nombre">producto.nombre</button>
+                <button type="button" class="btn" data-prop="precio">producto.precio</button>
+                <button type="button" class="btn" data-prop="disponible">producto.disponible</button>
+            </div>
+            <p class="salida mono" id="salida-objeto" aria-live="polite">Elijan una propiedad.</p>
+            <aside class="callout">
+                <p class="callout-title">Para preguntar en clase</p>
+                <p>¿Cuántos valores guarda la variable <code>producto</code>, y cómo se llama cada uno?</p>
+            </aside>
+        </section>
+
+        <section id="eventos" class="section">
+            <p class="kicker">Clase 10 · Parte 2</p>
+            <h2>2. Un evento es algo que sucede</h2>
+            <p>
+                Un evento HTML se dispara cuando le pasa algo a un elemento, al navegador o por una acción de quien usa la página.
+                JavaScript puede ejecutar código en ese momento.
+            </p>
+            <div class="grid-3">
+                <article class="card">
+                    <h3>La página cargó</h3>
+                    <p id="aviso-carga">Esperando el evento load…</p>
+                </article>
+                <article class="card">
+                    <h3>Cambió un campo</h3>
+                    <label class="field">Producto
+                        <input type="text" id="campo-cambio" value="café" autocomplete="off">
+                    </label>
+                    <p class="hint">El evento <code>change</code> se confirma al salir del campo.</p>
+                    <p class="salida" id="salida-cambio" aria-live="polite">Todavía no hubo un change.</p>
+                </article>
+                <article class="card">
+                    <h3>Clic en un botón</h3>
+                    <button type="button" class="btn" id="btn-clic-simple">Pedir un café</button>
+                    <p class="salida" id="salida-clic-simple" aria-live="polite">Todavía no hubo un click.</p>
+                </article>
+            </div>
+            <aside class="callout">
+                <p>HTML también deja escribir el código en un atributo del elemento, por ejemplo <code>onclick</code>. Eso lo vemos en la clase 11, junto con <code>addEventListener</code>.</p>
+            </aside>
+        </section>
+
+        <section id="primitivos" class="section">
+            <p class="kicker">Clase 10 · Parte 3</p>
+            <h2>3. Casi todo es un objeto</h2>
+            <p>
+                Un valor primitivo no tiene propiedades ni métodos. <code>3.14</code> es un primitivo: es el número, y nada más.
+                Todo lo demás es un objeto.
+            </p>
+            <p>JavaScript define 7 primitivos:</p>
+            <ul class="tag-list">
+                <li>string</li>
+                <li>number</li>
+                <li>boolean</li>
+                <li>null</li>
+                <li>undefined</li>
+                <li>symbol</li>
+                <li>bigint</li>
+            </ul>
+
+            <article class="card type-panel">
+                <p class="hint">Paso <span id="prim-indice">1 / 7</span>. En cada paso la variable se llama <code>dato</code>.</p>
+                <p class="type-code" id="prim-codigo">const dato = "café";</p>
+                <p>Valor: <strong id="prim-valor">café</strong></p>
+                <p><code>typeof dato</code> → <span class="pill" id="prim-typeof">string</span></p>
+                <p>Primitivo: <strong id="prim-nombre">string</strong></p>
+                <p id="prim-nota"></p>
+                <div class="btn-row">
+                    <button type="button" class="btn" id="btn-prim-siguiente">Siguiente primitivo</button>
+                    <button type="button" class="btn btn-light" id="btn-prim-reiniciar">Volver al string</button>
+                </div>
+            </article>
+
+            <h3>Con <code>new</code>, un primitivo pasa a ser objeto</h3>
+            <p>
+                Un booleano, un número o un texto siguen siendo primitivos si se escriben directo.
+                Con la palabra clave <code>new</code> se crea un objeto que los envuelve.
+            </p>
+            <button type="button" class="btn" id="btn-new-objeto">Comparar primitivo y new</button>
+            <p class="salida mono" id="salida-new" aria-live="polite">El resultado de typeof aparece acá.</p>
+
+            <h3>Estos son siempre objetos</h3>
+            <div class="obj-grid" id="siempre-objetos"></div>
+        </section>
+
+        <section id="constructores" class="section">
+            <p class="kicker">Clase 10 · Parte 4</p>
+            <h2>4. Un constructor es el molde</h2>
+            <p>
+                A veces hace falta un modelo para crear muchos objetos del mismo tipo.
+                Ese modelo es una función constructora. Por convención, el nombre empieza con mayúscula.
+                Los objetos se crean llamándola con <code>new</code>.
+            </p>
+            <pre><code>function Producto(nombre, precio) {
+  this.nombre = nombre;
+  this.precio = precio;
+}
+
+const cafe = new Producto("Café", 1800);</code></pre>
+            <p>
+                Dentro del constructor, <code>this</code> es el objeto nuevo.
+                <code>this.nombre = nombre</code> guarda el dato en ese objeto.
+            </p>
+            <div class="grid-2">
+                <div>
+                    <label class="field">Nombre
+                        <input type="text" id="ctor-nombre" value="Café" autocomplete="off">
+                    </label>
+                    <label class="field">Precio
+                        <input type="number" id="ctor-precio" min="0" value="1800">
+                    </label>
+                    <div class="btn-row">
+                        <button type="button" class="btn" id="btn-construir">new Producto</button>
+                        <button type="button" class="btn btn-light" id="btn-sin-new">Llamar sin new</button>
+                        <button type="button" class="btn btn-light" id="btn-ctor-limpiar">Vaciar la lista</button>
+                    </div>
+                </div>
+                <div>
+                    <ul id="lista-ctor"></ul>
+                    <p class="salida" id="salida-ctor" aria-live="polite"></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="propiedades" class="section">
+            <p class="kicker">Clase 10 · Parte 5</p>
+            <h2>5. Las propiedades son el estado</h2>
+            <p>
+                Una propiedad es un valor asociado a un objeto. El objeto es una colección de propiedades.
+                En general se pueden leer, cambiar, agregar y borrar. Algunas quedan de solo lectura.
+            </p>
+            <p>Hay tres formas de llegar a una propiedad:</p>
+            <pre><code>mesa.cliente
+mesa["producto"]
+mesa[expresion]</code></pre>
+            <div class="grid-2">
+                <div>
+                    <label class="field">Nombre para mesa[expresion]
+                        <input type="text" id="expr-prop" value="precio" autocomplete="off">
+                    </label>
+                    <label class="field">Nuevo precio
+                        <input type="number" id="mesa-precio" min="0" value="2000">
+                    </label>
+                    <div class="btn-row">
+                        <button type="button" class="btn" id="btn-mesa-precio">mesa.precio = …</button>
+                        <button type="button" class="btn" id="btn-mesa-agregar">mesa.listo = true</button>
+                        <button type="button" class="btn btn-light" id="btn-mesa-borrar">delete mesa.listo</button>
+                        <button type="button" class="btn btn-light" id="btn-mesa-readonly">Dejar precio solo lectura</button>
+                        <button type="button" class="btn btn-light" id="btn-mesa-reset">Reiniciar el objeto</button>
+                    </div>
+                </div>
+                <div>
+                    <p class="salida mono" id="mesa-lecturas" aria-live="polite"></p>
+                    <div class="console compact" id="mesa-json"></div>
+                    <p class="hint" id="mesa-nota"></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="metodos" class="section">
+            <p class="kicker">Clase 10 · Parte 6</p>
+            <h2>6. Un método es una propiedad con una función</h2>
+            <p>
+                Un método es una propiedad cuyo valor es una función.
+                <code>this</code> apunta a un objeto, y cuál sea depende de cómo se invoque.
+            </p>
+            <pre><code>const caja = {
+  local: "El Break",
+  total: 2700,
+  resumen: function () {
+    return this.local + ": " + this.total;
+  }
+};
+
+caja.resumen();</code></pre>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-metodo">caja.resumen()</button>
+                <button type="button" class="btn btn-light" id="btn-this-suelto">Sacar la función del objeto</button>
+            </div>
+            <p class="salida mono" id="salida-this" aria-live="polite">La llamada muestra a qué objeto apunta this.</p>
+            <aside class="callout">
+                <p class="callout-title">Para preguntar en clase</p>
+                <p>En <code>caja.resumen()</code>, ¿qué objeto es <code>this</code>?</p>
+            </aside>
+        </section>
+
+        <section id="mostrar" class="section">
+            <p class="kicker">Clase 10 · Parte 7</p>
+            <h2>7. Cuatro formas de ver el objeto</h2>
+            <p>El pedido de Ana está en un objeto. Estas son cuatro maneras habituales de mostrar su estado.</p>
+            <pre><code>const pedido = {
+  cliente: "Ana",
+  producto: "café",
+  cantidad: 2
+};</code></pre>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-ver-nombre">Por nombre</button>
+                <button type="button" class="btn" id="btn-ver-bucle">Bucle for…in</button>
+                <button type="button" class="btn" id="btn-ver-values">Object.values()</button>
+                <button type="button" class="btn" id="btn-ver-json">JSON.stringify()</button>
+            </div>
+            <div class="console compact" id="salida-ver" aria-live="polite">Elijan una forma de ver el pedido.</div>
+            <p class="hint"><code>Object.values</code> es posterior a ES5. Devuelve un arreglo con los valores. El bucle recorre las propiedades enumerables del objeto.</p>
+        </section>
+
+        <section id="accesores" class="section">
+            <p class="kicker">Clase 10 · Parte 8</p>
+            <h2>8. Getter y setter</h2>
+            <p>
+                ES5 (2009) agregó los accesores. Un getter corre código cuando se lee una propiedad.
+                Un setter corre código cuando se escribe. Por fuera se usan como cualquier propiedad.
+            </p>
+            <pre><code>const cafe = {
+  nombre: "Café",
+  _precio: 1800,
+  get precio() {
+    return this._precio;
+  },
+  set precio(valor) {
+    if (!Number.isFinite(valor) || valor &lt; 0) {
+      return;
+    }
+    this._precio = valor;
+  },
+  get etiqueta() {
+    return this.nombre + " · " + this.precio;
+  }
+};</code></pre>
+            <p>El guion bajo de <code>_precio</code> es una convención: el dato igual se puede leer. El getter ofrece el nombre <code>precio</code>.</p>
+            <div class="grid-2">
+                <div>
+                    <label class="field">Escribir cafe.precio
+                        <input type="number" id="precio-set" value="2000">
+                    </label>
+                    <div class="btn-row">
+                        <button type="button" class="btn" id="btn-set-precio">Usar el setter</button>
+                        <button type="button" class="btn btn-light" id="btn-get-etiqueta">Leer la etiqueta</button>
+                    </div>
+                    <p class="hint">Prueben un precio negativo: el setter puede rechazarlo.</p>
+                </div>
+                <p class="salida mono" id="salida-accesor" aria-live="polite">La etiqueta se arma cada vez que se lee.</p>
+            </div>
+        </section>
+
+        <section id="prototipos" class="section">
+            <p class="kicker">Clase 10 · Parte 9</p>
+            <h2>9. Los objetos heredan de un prototipo</h2>
+            <p>Todo objeto hereda propiedades y métodos de un prototipo. La cadena termina en <code>Object.prototype</code>.</p>
+            <ul class="steps">
+                <li>Un <code>Date</code> hereda de <code>Date.prototype</code>.</li>
+                <li>Un arreglo hereda de <code>Array.prototype</code>.</li>
+                <li>Un objeto creado con el constructor <code>Combo</code> hereda de <code>Combo.prototype</code>.</li>
+                <li><code>Date</code>, <code>Array</code> y <code>Combo</code> también heredan de <code>Object.prototype</code>.</li>
+            </ul>
+            <p class="salida" id="cadena-nativos" aria-live="polite"></p>
+            <p>
+                Agregar <code>mesa.listo</code> cambia un solo objeto.
+                Agregar un método en el prototipo se lo da a todos los objetos de ese tipo: los que ya existen y los que se creen después.
+            </p>
+            <pre><code>function Combo(nombre) {
+  this.nombre = nombre;
+}
+
+Combo.prototype.etiqueta = function () {
+  return "Combo: " + this.nombre;
+};</code></pre>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-proto-etiqueta">Agregar etiqueta al prototipo</button>
+                <button type="button" class="btn" id="btn-proto-nota">Nota solo en Desayuno</button>
+                <button type="button" class="btn btn-light" id="btn-proto-nuevo">new Combo</button>
+            </div>
+            <ul id="lista-combos"></ul>
+            <p class="salida" id="combo-nota" aria-live="polite"></p>
+            <p class="formula" id="cadena-proto"></p>
+        </section>
+
+        <section id="es5" class="section">
+            <p class="kicker">Clase 10 · Parte 10</p>
+            <h2>10. Métodos de objeto que llegaron con ES5</h2>
+            <p>
+                ECMAScript 5 (2009) sumó métodos para inspeccionar y proteger objetos.
+                <code>Object.defineProperty</code> ya apareció al dejar <code>precio</code> en solo lectura.
+                <code>Object.getPrototypeOf</code> es el que arma la cadena de la parte anterior.
+            </p>
+            <div class="table-wrap">
+                <table>
+                    <caption>Los que más vamos a nombrar</caption>
+                    <thead>
+                        <tr>
+                            <th>Método</th>
+                            <th>Para qué sirve</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>Object.keys(obj)</code></td>
+                            <td>Nombres de las propiedades propias y enumerables.</td>
+                        </tr>
+                        <tr>
+                            <td><code>Object.getOwnPropertyNames(obj)</code></td>
+                            <td>Nombres propios, también los que no se enumeran.</td>
+                        </tr>
+                        <tr>
+                            <td><code>Object.defineProperty(obj, nombre, descriptor)</code></td>
+                            <td>Crea o ajusta una propiedad: si se puede escribir, enumerar o borrar.</td>
+                        </tr>
+                        <tr>
+                            <td><code>Object.getPrototypeOf(obj)</code></td>
+                            <td>Devuelve el prototipo de ese objeto.</td>
+                        </tr>
+                        <tr>
+                            <td><code>Object.create(proto)</code></td>
+                            <td>Crea un objeto cuyo prototipo es <code>proto</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><code>Object.freeze(obj)</code></td>
+                            <td>Impide cambiar, agregar o borrar propiedades.</td>
+                        </tr>
+                        <tr>
+                            <td><code>Object.seal(obj)</code></td>
+                            <td>Impide agregar o borrar. Los valores que ya están se pueden cambiar.</td>
+                        </tr>
+                        <tr>
+                            <td><code>Object.preventExtensions(obj)</code></td>
+                            <td>Impide agregar propiedades nuevas.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-keys">Object.keys</button>
+                <button type="button" class="btn" id="btn-freeze">Object.freeze</button>
+                <button type="button" class="btn" id="btn-create">Object.create</button>
+            </div>
+            <p class="salida mono" id="salida-es5" aria-live="polite">La heladera del kiosco tiene café y medialunas. Los botones la consultan o la congelan.</p>
+        </section>
+
+        <section id="clases" class="section">
+            <p class="kicker">Clase 10 · Parte 11</p>
+            <h2>11. Una clase es una plantilla</h2>
+            <p>
+                ES2015 (ES6) incorporó las clases. Una clase no es un objeto: es la plantilla con la que se crean objetos.
+                En este ejemplo la clase se llama <code>Articulo</code>, para no mezclarla con la función <code>Producto</code> de la parte 4. El papel es el mismo.
+            </p>
+            <pre><code>class Articulo {
+  constructor(nombre, precio) {
+    this.nombre = nombre;
+    this.precio = precio;
+  }
+  describir() {
+    return this.nombre + " · " + this.precio;
+  }
+}</code></pre>
+            <ul class="steps">
+                <li>El método especial se llama exactamente <code>constructor</code>.</li>
+                <li>Corre solo, cuando se hace <code>new Articulo(...)</code>.</li>
+                <li>Ahí se inicializan las propiedades del objeto.</li>
+                <li>Si la clase no define constructor, JavaScript agrega uno vacío.</li>
+            </ul>
+            <div class="grid-2">
+                <div>
+                    <label class="field">Nombre
+                        <input type="text" id="clase-nombre" value="Café" autocomplete="off">
+                    </label>
+                    <label class="field">Precio
+                        <input type="number" id="clase-precio" min="0" value="1800">
+                    </label>
+                    <div class="btn-row">
+                        <button type="button" class="btn" id="btn-clase">new Articulo</button>
+                        <button type="button" class="btn btn-light" id="btn-clase-vacia">Clase sin constructor</button>
+                    </div>
+                </div>
+                <div>
+                    <ul id="lista-clase"></ul>
+                    <p class="salida" id="salida-clase" aria-live="polite">El constructor corre al crear el objeto.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="herencia" class="section">
+            <p class="kicker">Clase 10 · Parte 12</p>
+            <h2>12. Heredar con extends</h2>
+            <p>
+                <code>extends</code> crea una clase que hereda los métodos de otra.
+                La clase base se llama superclase o clase padre. <code>super(...)</code> llama a su constructor.
+            </p>
+            <pre><code>class Bebida extends Articulo {
+  constructor(nombre, precio, tamano) {
+    super(nombre, precio);
+    this.tamano = tamano;
+  }
+  describir() {
+    return super.describir() + " · " + this.tamano;
+  }
+}</code></pre>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-her-articulo">new Articulo</button>
+                <button type="button" class="btn" id="btn-her-bebida">new Bebida</button>
+            </div>
+            <p class="salida mono" id="salida-herencia" aria-live="polite">Cada botón crea un objeto y muestra describir().</p>
+        </section>
+
+        <section id="estaticos" class="section">
+            <p class="kicker">Clase 10 · Parte 13</p>
+            <h2>13. Un método static vive en la clase</h2>
+            <p>
+                Un método estático se define en la clase. Se llama sobre la clase: <code>Turno.reiniciar()</code>.
+                El objeto que sale de <code>new Turno(...)</code> no tiene ese método.
+            </p>
+            <pre><code>class Turno {
+  constructor(cliente) {
+    Turno.ultimo += 1;
+    this.numero = Turno.ultimo;
+    this.cliente = cliente;
+  }
+  static reiniciar() {
+    Turno.ultimo = 0;
+  }
+}
+Turno.ultimo = 0;</code></pre>
+            <p>Contador de la clase: <strong id="turno-contador">0</strong></p>
+            <label class="field">Cliente
+                <input type="text" id="turno-cliente" value="Ana" autocomplete="off">
+            </label>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-turno">new Turno</button>
+                <button type="button" class="btn" id="btn-turno-reset">Turno.reiniciar()</button>
+                <button type="button" class="btn btn-light" id="btn-turno-instancia">Llamarlo en el objeto</button>
+            </div>
+            <p class="salida" id="salida-turno" aria-live="polite">El número de turno lo lleva la clase.</p>
+        </section>
+
+        <section id="clase-11" class="section class-break">
+            <p class="kicker">Clase 11</p>
+            <h2>El documento como árbol de objetos</h2>
+            <p>
+                Hasta acá el objeto vivía en una variable del programa.
+                Desde acá el objeto es la página: al cargarla, el navegador arma el DOM y JavaScript lo recorre.
+            </p>
+        </section>
+
+        <section id="dom" class="section">
+            <p class="kicker">Clase 11 · Parte 14</p>
+            <h2>14. HTML DOM</h2>
+            <p>
+                El modelo de objeto del documento (DOM) es la interfaz con la que JavaScript lee y cambia el HTML.
+                Cuando la página carga, el navegador construye un árbol de objetos.
+            </p>
+            <div class="grid-3">
+                <article class="card">
+                    <h3>Elementos</h3>
+                    <p>Cada etiqueta HTML es un objeto del árbol.</p>
+                </article>
+                <article class="card">
+                    <h3>Propiedades</h3>
+                    <p>Un valor que se puede leer o escribir, como el texto de un párrafo.</p>
+                </article>
+                <article class="card">
+                    <h3>Métodos y eventos</h3>
+                    <p>Un método hace una acción: agregar, borrar, buscar. Un evento avisa que algo ocurrió.</p>
+                </article>
+            </div>
+            <p>Con ese modelo, JavaScript puede:</p>
+            <ul class="steps">
+                <li>Cambiar elementos, atributos y estilos.</li>
+                <li>Agregar elementos y atributos, y borrar los que ya están.</li>
+                <li>Reaccionar a los eventos de la página y registrar otros.</li>
+            </ul>
+            <pre><code>document
+└─ #arbol-vivo
+   ├─ h3 "Carta"
+   └─ ul#lista-nodos
+      ├─ li "Café"
+      ├─ li "Medialuna"
+      └─ li "Jugo"</code></pre>
+
+            <h3>Métodos que vamos a usar</h3>
+            <div class="table-wrap">
+                <table>
+                    <caption>Propiedad se lee o se escribe. Método hace una acción.</caption>
+                    <thead>
+                        <tr>
+                            <th>Para</th>
+                            <th>Ejemplos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Buscar</td>
+                            <td><code>getElementById</code>, <code>querySelector</code></td>
+                        </tr>
+                        <tr>
+                            <td>Leer y escribir contenido</td>
+                            <td><code>innerHTML</code>, <code>textContent</code></td>
+                        </tr>
+                        <tr>
+                            <td>Crear e insertar</td>
+                            <td><code>createElement</code>, <code>appendChild</code></td>
+                        </tr>
+                        <tr>
+                            <td>Borrar</td>
+                            <td><code>removeChild</code></td>
+                        </tr>
+                        <tr>
+                            <td>Estilo y atributos</td>
+                            <td><code>element.style</code>, <code>setAttribute</code></td>
+                        </tr>
+                        <tr>
+                            <td>Eventos</td>
+                            <td><code>addEventListener</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 id="documento">El objeto document es la página</h3>
+            <p>
+                Para llegar a cualquier elemento se empieza por <code>document</code>.
+                Desde ahí se busca, se cambia el texto y, más adelante, se agregan o se borran nodos.
+            </p>
+            <p>Título de esta página: <strong id="doc-titulo"></strong></p>
+            <div class="dom-box">
+                <p id="doc-muestra">Texto original del párrafo.</p>
+            </div>
+            <button type="button" class="btn" id="btn-doc">Cambiar el párrafo con document.getElementById</button>
+        </section>
+
+        <section id="acceso" class="section">
+            <p class="kicker">Clase 11 · Parte 15</p>
+            <h2>15. Cinco formas de encontrar un elemento</h2>
+            <p>Esta caja es el terreno de búsqueda. Cada botón usa una forma distinta y deja el resultado abajo.</p>
+            <div class="dom-box" id="caja-busqueda">
+                <h3 id="titulo-busqueda">Carta de mostrador</h3>
+                <p class="pieza-busqueda">Café</p>
+                <p class="pieza-busqueda">Medialuna</p>
+                <form id="form-busqueda" name="formBusqueda" action="#acceso">
+                    <label class="field">Cliente
+                        <input type="text" name="cliente" value="Ana" autocomplete="off">
+                    </label>
+                </form>
+                <a href="#dom">Volver al árbol del DOM</a>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-acc-id">Por id</button>
+                <button type="button" class="btn" id="btn-acc-tag">Por etiqueta</button>
+                <button type="button" class="btn" id="btn-acc-class">Por clase</button>
+                <button type="button" class="btn" id="btn-acc-qs">querySelector</button>
+                <button type="button" class="btn" id="btn-acc-all">querySelectorAll</button>
+                <button type="button" class="btn btn-light" id="btn-acc-forms">Colecciones del document</button>
+            </div>
+            <p class="salida" id="salida-acceso" aria-live="polite">Elijan cómo buscar.</p>
+        </section>
+
+        <section id="cambios" class="section">
+            <p class="kicker">Clase 11 · Parte 16</p>
+            <h2>16. Cambiar contenido, estilo y movimiento</h2>
+
+            <h3 id="html-dom">innerHTML escribe HTML</h3>
+            <p>
+                La forma más directa de cambiar el contenido de un elemento es la propiedad <code>innerHTML</code>.
+                Interpreta etiquetas. <code>textContent</code> deja el texto tal cual.
+            </p>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-inner-dom">innerHTML</button>
+                <button type="button" class="btn btn-light" id="btn-text-dom">textContent</button>
+            </div>
+            <div class="ticket" id="ticket-dom">
+                <p>El ticket aparece acá.</p>
+            </div>
+
+            <h3 id="estilos-dom">El estilo también es una propiedad</h3>
+            <p><code>elemento.style</code> cambia el CSS de ese elemento.</p>
+            <div class="dom-box" id="estilo-caja">Café recién servido.</div>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-color">Fondo verde</button>
+                <button type="button" class="btn" id="btn-tamano">Agrandar la letra</button>
+                <button type="button" class="btn btn-light" id="btn-estilo-reset">Volver al estilo de la hoja</button>
+            </div>
+
+            <h3 id="animacion">Una animación mueve una propiedad en el tiempo</h3>
+            <p>Cada cuadro cambia <code>left</code> de la taza. El recorrido es el estilo, actualizado seguido.</p>
+            <div class="stage" id="pista">
+                <div class="mover" id="taza">café</div>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-animar">Mover</button>
+                <button type="button" class="btn btn-light" id="btn-animar-stop">Detener</button>
+            </div>
+            <p class="hint" id="anim-nota">El botón Mover arranca los cuadros. Detener los corta.</p>
+        </section>
+
+        <section id="escucha" class="section">
+            <p class="kicker">Clase 11 · Parte 17</p>
+            <h2>17. Reaccionar a eventos</h2>
+            <p>
+                El código puede correr cuando ocurre un evento. Una forma es el atributo HTML <code>onclick</code>.
+                Otra, ya desde el archivo, es <code>addEventListener</code>.
+            </p>
+            <p>Estos son hechos habituales:</p>
+            <ul class="steps">
+                <li>Un clic con el mouse.</li>
+                <li>La página terminó de cargar. Eso ya se vio en la parte 2.</li>
+                <li>Se cargó una imagen.</li>
+                <li>El mouse entra o sale de un elemento.</li>
+                <li>Cambia un campo, o se envía un formulario.</li>
+                <li>Quien usa la página pulsa una tecla.</li>
+            </ul>
+
+            <h3>El atributo onclick</h3>
+            <p>El atributo busca una función global. Por eso esta página publica <code>registrarOnclick</code> en <code>window</code>.</p>
+            <pre><code>&lt;button type="button" onclick="window.registrarOnclick()"&gt;
+  Clic con onclick
+&lt;/button&gt;</code></pre>
+            <button type="button" class="btn" onclick="window.registrarOnclick()">Clic con onclick</button>
+            <p class="salida" id="salida-onclick" aria-live="polite">Este botón llama a la función desde el HTML.</p>
+
+            <h3>addEventListener y removeEventListener</h3>
+            <p>
+                El escuchador se engancha y se suelta desde <code>script.js</code>.
+                Para soltarlo hace falta la misma función que se registró.
+            </p>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-poner-escucha">addEventListener</button>
+                <button type="button" class="btn btn-light" id="btn-sacar-escucha">removeEventListener</button>
+                <button type="button" class="btn" id="btn-escuchar-clic">Clic para contar</button>
+            </div>
+            <p class="salida" id="salida-escucha" aria-live="polite">El botón de contar todavía no escucha.</p>
+
+            <div class="grid-2">
+                <article class="card">
+                    <h3>Mouse</h3>
+                    <div class="dom-box" id="zona-mouse">Pasá el mouse por esta caja.</div>
+                </article>
+                <article class="card">
+                    <h3>Teclado y formulario</h3>
+                    <form id="form-evento" action="#escucha">
+                        <label class="field">Anotá un producto y pulsá teclas
+                            <input type="text" id="tecla-evento" autocomplete="off">
+                        </label>
+                        <button type="submit" class="btn">Enviar el formulario</button>
+                    </form>
+                    <p class="salida" id="salida-tecla" aria-live="polite">keydown aparece acá.</p>
+                    <p class="salida" id="salida-envio" aria-live="polite">El envío se frena con preventDefault.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="nodos" class="section">
+            <p class="kicker">Clase 11 · Parte 18</p>
+            <h2>18. Nodos, colecciones y NodeList</h2>
+            <p>En el DOM, todo es un nodo:</p>
+            <ul class="steps">
+                <li>El documento es un nodo de documento.</li>
+                <li>Cada elemento HTML es un nodo de elemento (<code>nodeType</code> 1).</li>
+                <li>El texto de adentro es un nodo de texto (<code>nodeType</code> 3).</li>
+                <li>Los comentarios son nodos de comentario. El nodo de atributo quedó obsoleto: hoy el atributo se lee en el elemento.</li>
+            </ul>
+            <p>
+                El nodo de arriba del todo es la raíz. Cada nodo tiene un padre, salvo la raíz.
+                Puede tener varios hijos. Los hermanos comparten padre.
+            </p>
+
+            <div class="dom-box" id="arbol-vivo">
+                <h3 id="titulo-arbol">Carta</h3>
+                <ul id="lista-nodos">
+                    <li>Café</li>
+                    <li>Medialuna</li>
+                    <li>Jugo</li>
+                </ul>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-nodo-padre">Padre</button>
+                <button type="button" class="btn" id="btn-nodo-hijo">Primer hijo elemento</button>
+                <button type="button" class="btn" id="btn-nodo-ant">Hermano anterior</button>
+                <button type="button" class="btn" id="btn-nodo-sig">Hermano siguiente</button>
+                <button type="button" class="btn btn-light" id="btn-nodo-texto">Ver el nodo de texto</button>
+                <button type="button" class="btn btn-light" id="btn-nodo-raiz">Volver a la raíz</button>
+            </div>
+            <p class="salida mono" id="nodo-salida" aria-live="polite"></p>
+
+            <h3 id="crear-nodos">Crear un nodo e insertarlo</h3>
+            <pre><code>const li = document.createElement("li");
+li.textContent = nombre;
+lista.appendChild(li);</code></pre>
+            <label class="field">Texto del nuevo ítem
+                <input type="text" id="nodo-nombre" value="Tostado" autocomplete="off">
+            </label>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-nodo-crear">appendChild</button>
+                <button type="button" class="btn btn-light" id="btn-nodo-borrar">removeChild de este ítem</button>
+            </div>
+
+            <h3 id="colecciones">HTMLCollection</h3>
+            <p>
+                <code>getElementsByClassName</code> y <code>getElementsByTagName</code> devuelven una <code>HTMLCollection</code>.
+                Se parece a un arreglo y no lo es: <code>Array.isArray</code> da <code>false</code>.
+                Está viva: si después se agrega un elemento que coincide, la colección crece sola.
+            </p>
+
+            <h3 id="nodelist">NodeList</h3>
+            <p>
+                Un <code>NodeList</code> también es una lista de nodos.
+                <code>childNodes</code> devuelve un <code>NodeList</code>.
+                <code>querySelectorAll</code> también, y esa lista queda fija: no ve los elementos que se agregan después.
+                Hay que volver a consultar. En navegadores viejos, <code>getElementsByClassName</code> a veces devolvía un <code>NodeList</code>. Hoy devuelve <code>HTMLCollection</code>.
+            </p>
+            <div class="dom-box" id="zona-coleccion">
+                <p class="item-carta">Café</p>
+                <p class="item-carta">Medialuna</p>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <caption>La misma zona, leída de dos maneras</caption>
+                    <tbody>
+                        <tr>
+                            <th scope="row">HTMLCollection viva</th>
+                            <td id="col-viva">…</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">NodeList de querySelectorAll</th>
+                            <td id="col-fija">…</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">children</th>
+                            <td id="col-children">…</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">childNodes</th>
+                            <td id="col-child">…</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="salida" id="col-tipos" aria-live="polite"></p>
+            <p class="hint" id="col-nota"></p>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-col-agregar">Agregar un ítem</button>
+                <button type="button" class="btn btn-light" id="btn-col-requery">Volver a pedir querySelectorAll</button>
+            </div>
+        </section>
+
+        <section id="practica" class="section">
+            <p class="kicker">Para cerrar</p>
+            <h2>19. La carta junta las dos clases</h2>
+            <p>
+                Cada producto es un <code>Articulo</code>. Al agregarlo, el DOM gana un <code>li</code> nuevo.
+                Un clic en la fila lo marca. El JSON muestra el estado del arreglo.
+            </p>
+            <div class="grid-2">
+                <div>
+                    <label class="field">Nombre
+                        <input type="text" id="prac-nombre" value="Café" autocomplete="off">
+                    </label>
+                    <label class="field">Precio
+                        <input type="number" id="prac-precio" min="0" value="1800">
+                    </label>
+                    <div class="btn-row">
+                        <button type="button" class="btn" id="btn-prac-agregar">Agregar a la carta</button>
+                        <button type="button" class="btn btn-light" id="btn-prac-json">Ver el JSON</button>
+                        <button type="button" class="btn btn-light" id="btn-prac-comprobar">Comprobar la carta de muestra</button>
+                    </div>
+                    <p class="hint">La muestra cierra con café a 1800 y medialuna a 900.</p>
+                </div>
+                <div>
+                    <ul id="carta-practica"></ul>
+                    <p class="salida" id="salida-practica" aria-live="polite">La carta empieza vacía.</p>
+                </div>
+            </div>
+            <div class="console compact" id="carta-json" aria-live="polite">[]</div>
+
+            <h3>Chequeo rápido</h3>
+            <p>Ocho preguntas de las dos clases. En el aula virtual queda la autoevaluación formativa del módulo.</p>
+            <p class="score">Resultado: <span id="puntaje">0 de 8</span></p>
+            <p class="hint" id="puntaje-detalle">Todavía no hay respuestas.</p>
+
+            <article class="quiz-item" data-answer="par" data-ok="Sí. Cada dato del objeto es un par nombre:valor." data-bad="Dentro del objeto, cada dato se escribe nombre: valor. La etiqueta es HTML y let declara una variable.">
+                <h3>1. ¿Cómo se anota un dato dentro de un objeto?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="par">Como par nombre: valor</button>
+                    <button type="button" class="btn btn-light" data-value="etiqueta">Como una etiqueta HTML</button>
+                    <button type="button" class="btn btn-light" data-value="let">Solo con let, afuera del objeto</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="primitivo" data-ok="Sí. 3.14 es un primitivo: el número, sin propiedades ni métodos." data-bad="3.14 es un primitivo. El objeto con llaves y el arreglo son objetos.">
+                <h3>2. ¿Cuál de estos valores es primitivo?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="primitivo">3.14</button>
+                    <button type="button" class="btn btn-light" data-value="objeto">{ precio: 1800 }</button>
+                    <button type="button" class="btn btn-light" data-value="arreglo">["café", "medialuna"]</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="nuevo" data-ok="Sí. new crea el objeto y, dentro del constructor, this es ese objeto." data-bad="new crea un objeto nuevo. Dentro de Producto, this es ese objeto.">
+                <h3>3. ¿Qué hace <code>const cafe = new Producto("café", 1800)</code>?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="nuevo">Crea un objeto y this es ese objeto</button>
+                    <button type="button" class="btn btn-light" data-value="borra">Borra el prototipo de Producto</button>
+                    <button type="button" class="btn btn-light" data-value="document">Hace que this sea document</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="caja" data-ok="Sí. En caja.resumen(), this es el objeto caja." data-bad="Cuando el método se llama como caja.resumen(), this es caja, el objeto que está antes del punto.">
+                <h3>4. En <code>caja.resumen()</code>, si el método usa <code>this.local</code>, ¿qué es <code>this</code>?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="caja">El objeto caja</button>
+                    <button type="button" class="btn btn-light" data-value="funcion">La función constructora Producto</button>
+                    <button type="button" class="btn btn-light" data-value="document">El objeto document</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="plantilla" data-ok="Sí. La clase es una plantilla. El método que inicializa el objeto se llama constructor y corre con new." data-bad="Una clase es una plantilla, no el objeto ya creado. El método especial se llama constructor.">
+                <h3>5. ¿Qué es una clase y cómo se llama el método que inicializa cada objeto?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="plantilla">Es una plantilla. El método se llama constructor</button>
+                    <button type="button" class="btn btn-light" data-value="objeto">Es el objeto ya creado. El método se llama init</button>
+                    <button type="button" class="btn btn-light" data-value="evento">Es un evento. El método se llama main</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="hereda" data-ok="Sí. extends hereda de Articulo y super llama a su constructor." data-bad="extends declara la herencia. super(nombre, precio) llama al constructor de Articulo.">
+                <h3>6. ¿Para qué sirven <code>extends</code> y <code>super(nombre, precio)</code>?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="hereda">Para heredar y llamar al constructor de la clase base</button>
+                    <button type="button" class="btn btn-light" data-value="html">Para copiar un elemento HTML</button>
+                    <button type="button" class="btn btn-light" data-value="static">Para declarar un método static</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="clase" data-ok="Sí. Un método static se llama sobre la clase: Turno.reiniciar()." data-bad="El método static se llama sobre la clase. El objeto creado con new no lo tiene.">
+                <h3>7. ¿Dónde se llama un método <code>static</code>?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="clase">Sobre la clase: Turno.reiniciar()</button>
+                    <button type="button" class="btn btn-light" data-value="objeto">Sobre el objeto: turno.reiniciar()</button>
+                    <button type="button" class="btn btn-light" data-value="css">En la hoja CSS</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="fija" data-ok="Sí. Ese NodeList queda fijo. Hay que volver a llamar querySelectorAll. La HTMLCollection de getElementsByClassName sí crece sola." data-bad="querySelectorAll devuelve un NodeList que no se actualiza solo. La colección viva es la de getElementsByClassName.">
+                <h3>8. Guardé <code>const lista = zona.querySelectorAll(".item-carta")</code> y después agregué otro <code>.item-carta</code>. ¿Qué pasa con <code>lista</code>?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="fija">Sigue con la cantidad anterior</button>
+                    <button type="button" class="btn btn-light" data-value="crece">Crece sola, porque esa lista es viva</button>
+                    <button type="button" class="btn btn-light" data-value="borra">Se borra el documento</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+            <button type="button" class="btn btn-light" id="btn-reiniciar-quiz">Reiniciar el chequeo</button>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Introducción a la Programación Web · Unidad 4 · Clases 10 y 11 · Objetos, clases y el DOM</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
