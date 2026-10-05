@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unidad 4 — El navegador y JSON</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-bar">
+            <p class="eyebrow">Introducción a la Programación Web · Unidad 4 · Clase 12</p>
+            <h1>El navegador y JSON</h1>
+            <p class="header-lead">
+                El BOM es la ventana donde corre la página: tamaño, dirección, historial, avisos y tiempo.
+                JSON es el texto con el que un pedido puede salir de esa página y volver a entrar.
+            </p>
+        </div>
+        <nav class="site-nav" aria-label="Secciones de la clase">
+            <a href="#objetivos">Objetivos</a>
+            <p class="nav-label">El navegador</p>
+            <a href="#window">Window</a>
+            <a href="#screen">Screen</a>
+            <a href="#location">Location</a>
+            <a href="#history">History</a>
+            <a href="#navigator">Navigator</a>
+            <a href="#emergentes">Emergentes</a>
+            <a href="#tiempo">Tiempo</a>
+            <a href="#cookies">Cookies</a>
+            <p class="nav-label">JSON</p>
+            <a href="#json">JSON</a>
+            <a href="#sintaxis">Sintaxis</a>
+            <a href="#tipos">Tipos</a>
+            <a href="#convertir">Convertir</a>
+            <a href="#practica">Práctica</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="objetivos" class="section">
+            <p class="kicker">Antes de empezar</p>
+            <h2>Objetivos</h2>
+            <p>Esta clase sigue al DOM. El kiosco sigue siendo El Break. Al terminar, deberían poder:</p>
+            <ul class="objective-list">
+                <li>Explicar qué es el BOM y qué representa <code>window</code>.</li>
+                <li>Leer el tamaño de la pantalla con <code>screen</code>.</li>
+                <li>Leer <code>href</code>, <code>hostname</code>, <code>pathname</code> y <code>protocol</code> de <code>location</code>.</li>
+                <li>Moverse con <code>history.back()</code> y <code>history.forward()</code>, y explicar el límite de privacidad.</li>
+                <li>Leer <code>appName</code>, <code>appCodeName</code> y <code>platform</code> en <code>navigator</code>.</li>
+                <li>Distinguir <code>alert</code>, <code>confirm</code> y <code>prompt</code>, y qué devuelve cada uno.</li>
+                <li>Programar una espera con <code>setTimeout</code> y una repetición con <code>setInterval</code>.</li>
+                <li>Guardar un nombre en una cookie y volver a leerlo.</li>
+                <li>Explicar para qué sirve JSON y convertir con <code>JSON.parse</code> y <code>JSON.stringify</code>.</li>
+                <li>Reconocer la sintaxis de JSON y los seis tipos que admite.</li>
+            </ul>
+        </section>
+
+        <section id="window" class="section">
+            <p class="kicker">Parte 1</p>
+            <h2>1. window es la ventana del navegador</h2>
+            <p>
+                El modelo de objetos del navegador (BOM) es la forma en que JavaScript habla con el navegador.
+                No hay un estándar oficial único para el BOM. El objeto que sí está en todos los navegadores es <code>window</code>: representa la ventana.
+            </p>
+            <p>
+                <code>document</code> es una propiedad de esa ventana. <code>alert</code>, <code>setTimeout</code> y el resto de las funciones globales también viven ahí.
+                Una variable declarada con <code>var</code> y una función declarada con <code>function</code> quedan como miembros de <code>window</code>.
+                Una declarada con <code>let</code> o <code>const</code> existe en el archivo y no aparece como propiedad de <code>window</code>.
+            </p>
+            <pre><code>var nombreVentana = "El Break";
+
+function saludoVentana() {
+  return "Hola desde " + nombreVentana;
+}
+
+window.document === document
+window.saludoVentana()
+window.innerWidth</code></pre>
+            <div class="table-wrap">
+                <table>
+                    <caption>La ventana, leída ahora</caption>
+                    <tbody>
+                        <tr>
+                            <th scope="row">innerWidth</th>
+                            <td id="win-ancho">…</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">innerHeight</th>
+                            <td id="win-alto">…</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="hint">Esos dos números son el tamaño interno de la ventana, en píxeles. Cambian si se achica el navegador.</p>
+            <button type="button" class="btn" id="btn-ventana">Leer window</button>
+            <p class="salida mono" id="salida-ventana" aria-live="polite">El botón muestra document, la variable var y la función global.</p>
+            <aside class="callout">
+                <p class="callout-title">Para preguntar en clase</p>
+                <p>En este archivo hay un <code>const localKiosco = "El Break"</code>. ¿<code>window.localKiosco</code> tiene ese texto?</p>
+            </aside>
+        </section>
+
+        <section id="screen" class="section">
+            <p class="kicker">Parte 2</p>
+            <h2>2. screen es la pantalla</h2>
+            <p>
+                <code>screen</code> representa la pantalla del usuario. También se llega como <code>window.screen</code>.
+                <code>width</code> y <code>height</code> son el tamaño total. <code>availWidth</code> y <code>availHeight</code> descuentan la barra del sistema.
+                <code>colorDepth</code> es la profundidad de color, en bits.
+            </p>
+            <pre><code>screen.width
+screen.height
+screen.availWidth
+screen.availHeight
+screen.colorDepth</code></pre>
+            <div class="table-wrap">
+                <table>
+                    <caption>Esta pantalla</caption>
+                    <tbody>
+                        <tr>
+                            <th scope="row">width</th>
+                            <td id="scr-width">…</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">height</th>
+                            <td id="scr-height">…</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">availWidth</th>
+                            <td id="scr-avail-w">…</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">availHeight</th>
+                            <td id="scr-avail-h">…</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">colorDepth</th>
+                            <td id="scr-depth">…</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn" id="btn-screen">Volver a leer screen</button>
+            <p class="salida" id="salida-screen" aria-live="polite"></p>
+        </section>
+
+        <section id="location" class="section">
+            <p class="kicker">Parte 3</p>
+            <h2>3. location es la dirección de esta página</h2>
+            <p>
+                <code>window.location</code> guarda la URL actual. Asignar una URL completa a <code>location.href</code> abre esa página.
+                Estas cuatro propiedades son las que vamos a leer:
+            </p>
+            <ul class="steps">
+                <li><code>href</code>: la URL completa.</li>
+                <li><code>hostname</code>: el dominio del servidor.</li>
+                <li><code>pathname</code>: la ruta y el nombre del archivo.</li>
+                <li><code>protocol</code>: <code>http:</code>, <code>https:</code> o <code>file:</code>.</li>
+            </ul>
+            <pre><code>window.location.href
+window.location.hostname
+window.location.pathname
+window.location.protocol
+
+window.location.href = "https://ejemplo.edu/carta.html";</code></pre>
+            <div class="table-wrap">
+                <table>
+                    <caption>location de esta página</caption>
+                    <tbody>
+                        <tr>
+                            <th scope="row">href</th>
+                            <td class="break" id="loc-href">…</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">hostname</th>
+                            <td id="loc-host">…</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">pathname</th>
+                            <td class="break" id="loc-path">…</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">protocol</th>
+                            <td id="loc-proto">…</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-loc-leer">Leer location</button>
+                <button type="button" class="btn btn-light" id="btn-loc-json">Ir al ancla de JSON</button>
+            </div>
+            <p class="salida" id="salida-location" aria-live="polite">El ancla cambia el href y deja la clase abierta.</p>
+            <p class="hint" id="loc-nota"></p>
+        </section>
+
+        <section id="history" class="section">
+            <p class="kicker">Parte 4</p>
+            <h2>4. history se mueve como Atrás y Adelante</h2>
+            <p>
+                <code>window.history</code> es el historial de la ventana.
+                Por privacidad, JavaScript no recibe la lista de direcciones visitadas.
+                Sí puede moverse en esa lista, igual que los botones del navegador.
+            </p>
+            <pre><code>history.back()
+history.forward()</code></pre>
+            <p>
+                El primer botón anota una entrada en esta misma página con <code>history.pushState</code>.
+                Recién ahí <code>back()</code> tiene a dónde volver sin salir de la clase.
+                Si la entrada actual es el inicio, <code>back()</code> se iría de la página.
+            </p>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-hist-anotar">Anotar “café” en el historial</button>
+                <button type="button" class="btn" id="btn-hist-back">history.back()</button>
+                <button type="button" class="btn btn-light" id="btn-hist-forward">history.forward()</button>
+            </div>
+            <p class="salida mono" id="salida-historia" aria-live="polite"></p>
+        </section>
+
+        <section id="navigator" class="section">
+            <p class="kicker">Parte 5</p>
+            <h2>5. navigator describe el navegador</h2>
+            <p><code>window.navigator</code> guarda datos del navegador. Estas tres propiedades son las del material:</p>
+            <pre><code>navigator.appName
+navigator.appCodeName
+navigator.platform</code></pre>
+            <button type="button" class="btn" id="btn-nav">Leer navigator</button>
+            <p class="salida mono" id="salida-nav" aria-live="polite">El botón lee las tres propiedades en este navegador.</p>
+            <aside class="callout">
+                <p>
+                    <code>appName</code> y <code>appCodeName</code> quedaron fijos por compatibilidad.
+                    En los navegadores actuales suelen decir Netscape y Mozilla. No identifican Chrome, Edge ni Firefox.
+                    <code>platform</code> sí describe el sistema.
+                </p>
+            </aside>
+        </section>
+
+        <section id="emergentes" class="section">
+            <p class="kicker">Parte 6</p>
+            <h2>6. Tres cuadros emergentes</h2>
+            <p>
+                <code>alert</code>, <code>confirm</code> y <code>prompt</code> son métodos de <code>window</code>.
+                Los tres pausan la página hasta que alguien responde.
+            </p>
+            <div class="grid-3">
+                <article class="card">
+                    <h3>alert</h3>
+                    <p>Informa. Hay un solo botón, Aceptar. No devuelve un dato: el resultado es <code>undefined</code>.</p>
+                </article>
+                <article class="card">
+                    <h3>confirm</h3>
+                    <p>Pide una verificación. Aceptar devuelve <code>true</code>. Cancelar devuelve <code>false</code>.</p>
+                </article>
+                <article class="card">
+                    <h3>prompt</h3>
+                    <p>Pide un texto. Aceptar devuelve ese texto. Cancelar devuelve <code>null</code>.</p>
+                </article>
+            </div>
+            <pre><code>window.alert("El café de Ana está listo.");
+const acepta = window.confirm("¿Confirmás el pedido de Ana?");
+const nombre = window.prompt("¿Cómo te llamás?", "Ana");</code></pre>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-alert">alert</button>
+                <button type="button" class="btn" id="btn-confirm">confirm</button>
+                <button type="button" class="btn" id="btn-prompt">prompt</button>
+            </div>
+            <p class="salida mono" id="salida-pop" aria-live="polite">Cada botón abre el cuadro y escribe acá lo que devolvió.</p>
+        </section>
+
+        <section id="tiempo" class="section">
+            <p class="kicker">Parte 7</p>
+            <h2>7. setTimeout espera. setInterval repite.</h2>
+            <p>
+                Un temporizador ejecuta una función después de una cantidad de milisegundos.
+                <code>setTimeout</code> la corre una vez. <code>setInterval</code> la vuelve a correr, una y otra vez.
+                Los dos son métodos de <code>window</code>. <code>clearTimeout</code> y <code>clearInterval</code> los frenan.
+            </p>
+            <pre><code>const aviso = setTimeout(function () {
+  // una vez, a los 2000 ms
+}, 2000);
+
+const reloj = setInterval(function () {
+  // cada 1000 ms
+}, 1000);
+
+clearTimeout(aviso);
+clearInterval(reloj);</code></pre>
+            <div class="ticket" id="ticket-tiempo">
+                <p id="tiempo-estado">El pedido de Ana está en preparación.</p>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-timeout">setTimeout de 2 segundos</button>
+                <button type="button" class="btn btn-light" id="btn-timeout-stop">clearTimeout</button>
+            </div>
+            <p class="result-big" id="tiempo-cuenta">0 s</p>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-interval">setInterval de 1 segundo</button>
+                <button type="button" class="btn btn-light" id="btn-interval-stop">clearInterval</button>
+            </div>
+            <p class="salida" id="salida-tiempo" aria-live="polite">El aviso del café usa setTimeout. El contador usa setInterval.</p>
+        </section>
+
+        <section id="cookies" class="section">
+            <p class="kicker">Parte 8</p>
+            <h2>8. Una cookie recuerda un dato chico</h2>
+            <p>
+                Cuando el servidor terminó de enviar la página, la conexión se cierra y el servidor ya no tiene presente a la persona.
+                Una cookie es un archivo de texto chico en la computadora, inventado para guardar ese recuerdo.
+                Si Ana deja su nombre, la próxima visita puede leerlo.
+            </p>
+            <p>
+                En el navegador se escribe y se lee con <code>document.cookie</code>.
+                El texto lleva el nombre, el valor, la fecha de vencimiento y la ruta.
+            </p>
+            <pre><code>document.cookie = "cliente=" + encodeURIComponent("Ana")
+  + ";expires=" + vence + ";path=/";</code></pre>
+            <label class="field">Nombre para la cookie cliente
+                <input type="text" id="cookie-nombre" value="Ana" maxlength="40" autocomplete="off">
+            </label>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-cookie-guardar">Guardar la cookie</button>
+                <button type="button" class="btn" id="btn-cookie-leer">Leer la cookie</button>
+                <button type="button" class="btn btn-light" id="btn-cookie-borrar">Borrar la cookie</button>
+            </div>
+            <p class="salida" id="salida-cookie" aria-live="polite">Todavía no se escribió la cookie de esta clase.</p>
+            <p class="hint mono break" id="cookie-cruda"></p>
+        </section>
+
+        <section id="corte-json" class="section class-break">
+            <p class="kicker">Segunda parte</p>
+            <h2>Del navegador al texto que viaja</h2>
+            <p>
+                Hasta acá JavaScript mira la ventana. Desde acá el pedido de Ana se convierte en texto JSON,
+                el formato con el que ese dato puede ir a otra computadora y volver.
+            </p>
+        </section>
+
+        <section id="json" class="section">
+            <p class="kicker">Parte 9</p>
+            <h2>9. JSON es texto con forma de objeto</h2>
+            <p>
+                JSON significa JavaScript Object Notation. Es un formato de intercambio: texto plano, escrito con la notación de los objetos de JavaScript.
+                Sirve para mandar datos entre computadoras y no depende de un lenguaje. Muchos lenguajes saben leerlo y generarlo.
+            </p>
+            <p>
+                Como se parece a un objeto de JavaScript, el programa lo convierte con dos funciones.
+                <code>JSON.parse</code> toma el texto y devuelve el valor. <code>JSON.stringify</code> toma el valor y devuelve el texto.
+            </p>
+            <div class="grid-3">
+                <article class="card">
+                    <h3>Llega texto</h3>
+                    <p>El texto puro que viene de un servidor se usa como objeto de JavaScript.</p>
+                </article>
+                <article class="card">
+                    <h3>Sale texto</h3>
+                    <p>Un objeto de JavaScript se envía como texto puro.</p>
+                </article>
+                <article class="card">
+                    <h3>Se trabaja el objeto</h3>
+                    <p>En la página, el dato se maneja como objeto. La conversión la hacen parse y stringify.</p>
+                </article>
+            </div>
+            <pre><code>const pedido = {
+  cliente: "Ana",
+  producto: "café",
+  precio: 1800,
+  cantidad: 2
+};
+
+const texto = JSON.stringify(pedido);
+const otraVez = JSON.parse(texto);</code></pre>
+        </section>
+
+        <section id="sintaxis" class="section">
+            <p class="kicker">Parte 10</p>
+            <h2>10. La sintaxis cabe en cuatro reglas</h2>
+            <ul class="steps">
+                <li>Los datos son pares nombre/valor.</li>
+                <li>Esos pares se separan con comas.</li>
+                <li>Las llaves sostienen un objeto.</li>
+                <li>Los corchetes sostienen un arreglo.</li>
+            </ul>
+            <p>
+                El nombre va entre comillas dobles, después dos puntos, después el valor.
+                <code>"cliente": "Ana"</code> es un par. En un objeto de JavaScript las comillas del nombre se pueden omitir. En JSON, no.
+            </p>
+            <pre><code>{
+  "cliente": "Ana",
+  "producto": "café",
+  "precio": 1800,
+  "cantidad": 2,
+  "paraLlevar": true,
+  "nota": null,
+  "extras": ["medialuna"]
+}</code></pre>
+        </section>
+
+        <section id="tipos" class="section">
+            <p class="kicker">Parte 11</p>
+            <h2>11. Seis tipos entran. Tres no viajan.</h2>
+            <div class="table-wrap">
+                <table>
+                    <caption>Qué puede haber en un texto JSON</caption>
+                    <thead>
+                        <tr>
+                            <th>Entra</th>
+                            <th>No entra</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>string, number, object, array, boolean, null</td>
+                            <td>una función, un Date, undefined</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>
+                <code>JSON.stringify</code> arma el texto con lo que sí entra.
+                Una función y un <code>undefined</code> desaparecen del texto. Un <code>Date</code> sale como string, y al volver a leerlo ya no es una fecha.
+            </p>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-tipo-json">Ver los tipos de un JSON válido</button>
+                <button type="button" class="btn btn-light" id="btn-tipo-raro">Stringify con función, Date y undefined</button>
+            </div>
+            <div class="console compact" id="salida-tipos" aria-live="polite">Los botones muestran qué tipo tiene cada valor.</div>
+        </section>
+
+        <section id="convertir" class="section">
+            <p class="kicker">Parte 12</p>
+            <h2>12. parse entra. stringify sale.</h2>
+            <p>
+                El pedido vive en un objeto. <code>JSON.stringify</code> lo deja en una cadena.
+                <code>JSON.parse</code> lee esa cadena y rearma el objeto. Con el objeto se puede calcular <code>precio * cantidad</code>.
+                Si el texto no cumple la sintaxis, <code>JSON.parse</code> lanza <code>SyntaxError</code>.
+            </p>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-stringify">JSON.stringify</button>
+                <button type="button" class="btn" id="btn-parse">JSON.parse</button>
+                <button type="button" class="btn btn-light" id="btn-parse-mal">Parsear un texto inválido</button>
+            </div>
+            <div class="console compact" id="salida-json" aria-live="polite"></div>
+            <p class="salida" id="salida-parse" aria-live="polite">El total del pedido parseado aparece acá.</p>
+        </section>
+
+        <section id="practica" class="section">
+            <p class="kicker">Para cerrar</p>
+            <h2>13. El pedido sale como texto y el nombre queda en una cookie</h2>
+            <p>
+                El pedido de Ana es el objeto de la parte 9. El texto es la forma de mandarlo.
+                La cookie guarda solo el nombre, para la próxima visita.
+            </p>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-prac-texto">Preparar el texto</button>
+                <button type="button" class="btn" id="btn-prac-leer">Leer el texto</button>
+                <button type="button" class="btn" id="btn-prac-cookie">Guardar el cliente en la cookie</button>
+                <button type="button" class="btn btn-light" id="btn-prac-comprobar">Comprobar</button>
+            </div>
+            <div class="ticket" id="ticket-prac">
+                <p>El ticket aparece al leer el texto.</p>
+            </div>
+            <div class="console compact" id="prac-json" aria-live="polite"></div>
+            <p class="salida" id="salida-practica" aria-live="polite">La comprobación espera el café de Ana, total 3600, y la cookie cliente=Ana.</p>
+
+            <h3>Chequeo rápido</h3>
+            <p>Ocho preguntas de esta clase. En el aula virtual queda la autoevaluación formativa del módulo.</p>
+            <p class="score">Resultado: <span id="puntaje">0 de 8</span></p>
+            <p class="hint" id="puntaje-detalle">Todavía no hay respuestas.</p>
+
+            <article class="quiz-item" data-answer="ventana" data-ok="Sí. window es la ventana. document es una propiedad suya, y una función global también." data-bad="window representa la ventana del navegador. document, alert y las funciones globales son miembros de window.">
+                <h3>1. ¿Qué es <code>window</code> y dónde está <code>document</code>?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="ventana">Es la ventana. document es una propiedad de window</button>
+                    <button type="button" class="btn btn-light" data-value="css">Es la hoja CSS de la página</button>
+                    <button type="button" class="btn btn-light" data-value="adentro">Es un elemento HTML que está adentro de document</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="cada-uno" data-ok="Sí. location.href es la URL. screen.width es el ancho de la pantalla." data-bad="location habla de la dirección de la página. screen habla del tamaño de la pantalla.">
+                <h3>2. ¿Qué lee <code>location.href</code> y qué lee <code>screen.width</code>?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="cada-uno">href es la URL. width es el ancho de la pantalla</button>
+                    <button type="button" class="btn btn-light" data-value="al-reves">href es el ancho. width es la URL</button>
+                    <button type="button" class="btn btn-light" data-value="cookies">Los dos leen la cookie del cliente</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="atras" data-ok="Sí. back() es el botón Atrás. La lista de direcciones no se puede leer." data-bad="history.back() se mueve hacia atrás. Por privacidad, el programa no recibe la lista de páginas visitadas.">
+                <h3>3. ¿Qué hace <code>history.back()</code> y qué pasa con la lista de páginas visitadas?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="atras">Equivale al botón Atrás. La lista de direcciones no se puede leer</button>
+                    <button type="button" class="btn btn-light" data-value="lista">Devuelve un arreglo con todas las direcciones visitadas</button>
+                    <button type="button" class="btn btn-light" data-value="borra">Borra las cookies del navegador</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="valores" data-ok="Sí. confirm devuelve true o false. prompt devuelve el texto, o null si se cancela." data-bad="Aceptar en confirm da true y Cancelar da false. En prompt, Aceptar da el texto y Cancelar da null.">
+                <h3>4. ¿Qué devuelven <code>confirm</code> y <code>prompt</code>?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="valores">confirm devuelve true o false. prompt devuelve el texto o null</button>
+                    <button type="button" class="btn btn-light" data-value="ambos-false">Los dos devuelven false</button>
+                    <button type="button" class="btn btn-light" data-value="vacio">Los dos devuelven una cadena vacía</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="una-vez" data-ok="Sí. setTimeout corre una vez. setInterval repite la función." data-bad="setTimeout espera y corre una vez. setInterval vuelve a ejecutar la función en cada intervalo.">
+                <h3>5. ¿En qué se diferencian <code>setTimeout</code> y <code>setInterval</code>?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="una-vez">setTimeout corre una vez. setInterval repite</button>
+                    <button type="button" class="btn btn-light" data-value="los-dos">Los dos repiten la función</button>
+                    <button type="button" class="btn btn-light" data-value="al-reves">setTimeout repite y setInterval corre una vez</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="recordar" data-ok="Sí. La cookie guarda un dato del usuario cuando la conexión con el servidor ya se cerró." data-bad="La cookie existe para recordar un dato de la persona. El servidor, al cerrar la conexión, ya no lo tiene presente.">
+                <h3>6. ¿Para qué se inventaron las cookies?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="recordar">Para recordar un dato del usuario cuando la conexión ya se cerró</button>
+                    <button type="button" class="btn btn-light" data-value="ejecutar">Para ejecutar JavaScript en el servidor</button>
+                    <button type="button" class="btn btn-light" data-value="dom">Para reemplazar el DOM de la página</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="direccion" data-ok="Sí. parse convierte el texto en valor. stringify convierte el valor en texto." data-bad="JSON.parse lee texto JSON. JSON.stringify escribe el texto a partir del objeto.">
+                <h3>7. ¿Qué hace cada función?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="direccion">parse convierte texto en objeto. stringify convierte objeto en texto</button>
+                    <button type="button" class="btn btn-light" data-value="al-reves">parse convierte objeto en texto. stringify convierte texto en objeto</button>
+                    <button type="button" class="btn btn-light" data-value="pantalla">Las dos escriben el pedido en la pantalla y no convierten nada</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="funcion" data-ok="Sí. Una función, un Date y undefined no son datos JSON. stringify los saca o, en el Date, los deja como texto." data-bad="JSON admite string, number, object, array, boolean y null. Una función no entra en el texto.">
+                <h3>8. ¿Cuál de estos valores no es un dato JSON?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="funcion">Una función</button>
+                    <button type="button" class="btn btn-light" data-value="null">null</button>
+                    <button type="button" class="btn btn-light" data-value="arreglo">["medialuna"]</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+            <button type="button" class="btn btn-light" id="btn-reiniciar-quiz">Reiniciar el chequeo</button>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Introducción a la Programación Web · Unidad 4 · Clase 12 · El navegador y JSON</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
