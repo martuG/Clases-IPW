@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unidad 5 — XML</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-bar">
+            <p class="eyebrow">Introducción a la Programación Web · Unidad 5</p>
+            <h1>XML: el dato viaja en etiquetas</h1>
+            <p class="header-lead">
+                La nota de Juan para Ana es un documento XML. El XML guarda el dato.
+                HTML lo muestra. El documento, solo, no dibuja la página.
+            </p>
+        </div>
+        <nav class="site-nav" aria-label="Secciones de la clase">
+            <a href="#objetivos">Objetivos</a>
+            <a href="#que-es">Qué es</a>
+            <a href="#datos">Datos</a>
+            <a href="#arbol">Árbol</a>
+            <a href="#sintaxis">Sintaxis</a>
+            <a href="#elementos">Elementos</a>
+            <a href="#atributos">Atributos</a>
+            <a href="#espacios">Espacios</a>
+            <a href="#mostrar">Mostrar</a>
+            <a href="#practica">Práctica</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="objetivos" class="section">
+            <p class="kicker">Antes de empezar</p>
+            <h2>Objetivos</h2>
+            <p>El kiosco sigue siendo El Break. La nota del pedido ahora viaja en XML. Al terminar, deberían poder:</p>
+            <ul class="objective-list">
+                <li>Explicar para qué se diseñó XML y qué puede hacer el documento por sí solo.</li>
+                <li>Separar el dato de la presentación: cambia el XML y JavaScript vuelve a escribir el HTML.</li>
+                <li>Leer el documento como árbol: raíz, padre, hijo, hermano, texto y atributo.</li>
+                <li>Reconocer el prólogo, el cierre obligatorio, las mayúsculas, el anidado y las comillas.</li>
+                <li>Nombrar un elemento con las reglas de XML y escribir un elemento vacío.</li>
+                <li>Decidir cuándo un dato conviene como elemento.</li>
+                <li>Separar dos elementos de igual nombre con un espacio de nombres.</li>
+                <li>Ver el XML tal cual y transformarlo en XHTML con XSLT.</li>
+            </ul>
+        </section>
+
+        <section id="que-es" class="section">
+            <p class="kicker">Parte 1</p>
+            <h2>1. XML guarda y transporta datos</h2>
+            <p>
+                XML significa lenguaje de marcado extensible. Se diseñó para almacenar y transportar datos,
+                y para que una persona y un programa puedan leer el mismo texto. Se usa en muchos sistemas
+                y, muy seguido, para repartir datos por Internet.
+            </p>
+            <p>
+                Una nota puede decir quién la manda, quién la recibe, cuál es el encabezado y cuál es el cuerpo.
+                Con todo eso escrito, el documento no hace nada por sí solo. Es información envuelta en etiquetas.
+                Un programa tiene que enviarla, recibirla, guardarla o mostrarla.
+            </p>
+            <div class="grid-2">
+                <article class="card">
+                    <h3>para</h3>
+                    <p>Quien recibe la nota. En el ejemplo, Ana.</p>
+                </article>
+                <article class="card">
+                    <h3>de</h3>
+                    <p>Quien la manda. En el ejemplo, Juan.</p>
+                </article>
+                <article class="card">
+                    <h3>encabezado</h3>
+                    <p>El título del mensaje. En el ejemplo, Pedido listo.</p>
+                </article>
+                <article class="card">
+                    <h3>cuerpo</h3>
+                    <p>El texto. En el ejemplo, el café está en la barra.</p>
+                </article>
+            </div>
+            <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;nota fecha="12/11/2022"&gt;
+  &lt;para&gt;Ana&lt;/para&gt;
+  &lt;de&gt;Juan&lt;/de&gt;
+  &lt;encabezado&gt;Pedido listo&lt;/encabezado&gt;
+  &lt;cuerpo&gt;El café está en la barra.&lt;/cuerpo&gt;
+&lt;/nota&gt;</code></pre>
+            <p class="hint">La primera línea es el prólogo. <code>fecha</code> es un atributo. El resto son elementos.</p>
+            <button type="button" class="btn" id="btn-solo">Leer la nota y no mostrarla como página</button>
+            <p class="salida" id="salida-solo" aria-live="polite">El botón lee el XML y deja el dato en texto. La nota no se dibuja sola.</p>
+        </section>
+
+        <section id="datos" class="section">
+            <p class="kicker">Parte 2</p>
+            <h2>2. El dato va en el XML. La página, en el HTML</h2>
+            <p>
+                En la web, XML se usa mucho para separar los datos de la presentación.
+                El documento no dice el color ni el tamaño de la nota. Los mismos datos pueden mostrarse de distintas maneras.
+            </p>
+            <p>
+                XML suele completar a HTML. XML almacena o transporta el dato. HTML lo formatea y lo muestra.
+                Si mañana la nota la manda Pedro, el HTML puede quedar igual: cambia el XML y unas líneas de JavaScript vuelven a escribir el contenido.
+            </p>
+            <pre><code>const documento = new DOMParser().parseFromString(textoXml, "application/xml");
+const nota = documento.documentElement;
+
+nota.getAttribute("fecha");
+nota.querySelector("para").textContent;</code></pre>
+            <div class="grid-2">
+                <div>
+                    <h3>El XML</h3>
+                    <pre class="compact-pre" id="datos-xml"></pre>
+                </div>
+                <div>
+                    <h3>Los mismos elementos de esta página</h3>
+                    <article class="ticket" id="datos-ticket">
+                        <h3 id="datos-encabezado">…</h3>
+                        <p id="datos-para"></p>
+                        <p id="datos-de"></p>
+                        <p id="datos-cuerpo"></p>
+                        <p id="datos-fecha"></p>
+                    </article>
+                </div>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-nota-juan">Nota de Juan</button>
+                <button type="button" class="btn" id="btn-nota-pedro">Nota de Pedro</button>
+            </div>
+            <p class="salida" id="salida-datos" aria-live="polite">Los dos botones escriben en el mismo ticket. El HTML de la página no cambia.</p>
+        </section>
+
+        <section id="arbol" class="section">
+            <p class="kicker">Parte 3</p>
+            <h2>3. El documento es un árbol</h2>
+            <p>
+                Un documento XML es un árbol de elementos. Empieza en un elemento raíz y se ramifica en elementos secundarios.
+                Padre, hijo y hermano nombran las relaciones. Un padre tiene hijos. Un hijo tiene un padre.
+                Los hermanos son hijos del mismo padre, en el mismo nivel.
+            </p>
+            <p>Cualquier elemento puede tener texto y atributos.</p>
+            <div class="xml-tree" id="arbol-nota">
+                <p><code>nota</code> · raíz · atributo <code>fecha="12/11/2022"</code></p>
+                <ul>
+                    <li><code>para</code> — Ana</li>
+                    <li><code>de</code> — Juan</li>
+                    <li><code>encabezado</code> — Pedido listo</li>
+                    <li><code>cuerpo</code> — El café está en la barra.</li>
+                </ul>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <caption>La nota, leída como árbol</caption>
+                    <thead>
+                        <tr>
+                            <th>Término</th>
+                            <th>En este documento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Raíz</td>
+                            <td><code>nota</code>. El árbol tiene una sola.</td>
+                        </tr>
+                        <tr>
+                            <td>Padre</td>
+                            <td><code>nota</code> es el padre de los cuatro elementos.</td>
+                        </tr>
+                        <tr>
+                            <td>Hijos</td>
+                            <td><code>para</code>, <code>de</code>, <code>encabezado</code> y <code>cuerpo</code>.</td>
+                        </tr>
+                        <tr>
+                            <td>Hermanos</td>
+                            <td>Esos cuatro, entre sí.</td>
+                        </tr>
+                        <tr>
+                            <td>Atributo</td>
+                            <td><code>fecha</code>. No es un hijo.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn" id="btn-arbol">Leer el árbol con el DOM</button>
+            <p class="salida mono" id="salida-arbol" aria-live="polite">El botón confirma la raíz, el padre, los hermanos y el atributo.</p>
+        </section>
+
+        <section id="sintaxis" class="section">
+            <p class="kicker">Parte 4</p>
+            <h2>4. La sintaxis</h2>
+            <p>Esta línea es el prólogo. Es opcional. Si está, va primero:</p>
+            <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</code></pre>
+            <p>
+                El documento puede traer caracteres internacionales, como la é de café.
+                Conviene declarar la codificación, o guardar el archivo como UTF-8.
+                UTF-8 es la codificación predeterminada.
+            </p>
+            <ul class="steps">
+                <li>Todo elemento se cierra. Un vacío puede usar autocierre: <code>&lt;br /&gt;</code>.</li>
+                <li>Las mayúsculas importan. <code>&lt;Letra&gt;</code> y <code>&lt;letra&gt;</code> son dos nombres.</li>
+                <li>La apertura y el cierre se escriben igual.</li>
+                <li>Si un elemento se abre adentro de otro, se cierra adentro de ese otro.</li>
+                <li>El valor de un atributo va siempre entre comillas.</li>
+            </ul>
+            <p>
+                En HTML a veces se ve <code>&lt;b&gt;&lt;i&gt;texto&lt;/b&gt;&lt;/i&gt;</code>.
+                En XML, <code>&lt;i&gt;</code> se abrió dentro de <code>&lt;b&gt;</code> y tiene que cerrarse ahí:
+                <code>&lt;b&gt;&lt;i&gt;texto&lt;/i&gt;&lt;/b&gt;</code>.
+            </p>
+            <div class="btn-row">
+                <button type="button" class="btn" data-caso="con-prologo">Con prólogo</button>
+                <button type="button" class="btn btn-light" data-caso="sin-prologo">Sin prólogo</button>
+                <button type="button" class="btn btn-light" data-caso="prologo-tarde">Prólogo al final</button>
+                <button type="button" class="btn btn-light" data-caso="sin-cierre">Sin cierre</button>
+                <button type="button" class="btn btn-light" data-caso="mal-anidada">Mal anidada</button>
+                <button type="button" class="btn btn-light" data-caso="sin-comillas">Sin comillas</button>
+                <button type="button" class="btn btn-light" data-caso="mayuscula">Otra mayúscula</button>
+                <button type="button" class="btn btn-light" data-caso="dos-raices">Dos raíces</button>
+            </div>
+            <pre id="xml-sintaxis">El botón escribe acá el XML que se está probando.</pre>
+            <p class="salida" id="salida-sintaxis" aria-live="polite">Cada botón lo parsea el navegador con DOMParser.</p>
+        </section>
+
+        <section id="elementos" class="section">
+            <p class="kicker">Parte 5</p>
+            <h2>5. Un elemento va de la etiqueta inicial a la final</h2>
+            <p>Un elemento puede contener texto, atributos, otros elementos, o una mezcla.</p>
+            <div class="table-wrap">
+                <table>
+                    <caption>Qué hay en la nota de Juan</caption>
+                    <thead>
+                        <tr>
+                            <th>Contenido</th>
+                            <th>Ejemplo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Texto</td>
+                            <td><code>&lt;para&gt;Ana&lt;/para&gt;</code></td>
+                        </tr>
+                        <tr>
+                            <td>Atributo</td>
+                            <td><code>fecha</code> en <code>nota</code></td>
+                        </tr>
+                        <tr>
+                            <td>Otros elementos</td>
+                            <td><code>para</code>, <code>de</code>, <code>encabezado</code>, <code>cuerpo</code></td>
+                        </tr>
+                        <tr>
+                            <td>Mezcla</td>
+                            <td><code>nota</code> tiene un atributo y cuatro hijos</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>
+                Un elemento sin contenido está vacío. Se escribe <code>&lt;aviso&gt;&lt;/aviso&gt;</code>
+                o con autocierre: <code>&lt;listo /&gt;</code>.
+            </p>
+            <pre><code>&lt;nota&gt;
+  &lt;aviso&gt;&lt;/aviso&gt;
+  &lt;listo /&gt;
+&lt;/nota&gt;</code></pre>
+            <button type="button" class="btn" id="btn-vacios">Leer los elementos vacíos</button>
+            <p class="salida mono" id="salida-vacios" aria-live="polite">Los dos se leen vacíos. Cambia la forma de escribirlos.</p>
+
+            <h3>El nombre tiene reglas</h3>
+            <ul class="steps">
+                <li>Distingue mayúsculas de minúsculas.</li>
+                <li>Empieza con una letra o con un guión bajo.</li>
+                <li>No empieza con las letras xml, en cualquier combinación de mayúsculas.</li>
+                <li>Puede seguir con letras, dígitos, guiones, guiones bajos y puntos.</li>
+                <li>No lleva espacios.</li>
+            </ul>
+            <div class="table-wrap">
+                <table>
+                    <caption>Ocho nombres, contra las reglas</caption>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Resultado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-nombres">
+                        <tr data-nombre="nota">
+                            <td><code>nota</code></td>
+                            <td class="resultado">…</td>
+                        </tr>
+                        <tr data-nombre="_codigo">
+                            <td><code>_codigo</code></td>
+                            <td class="resultado">…</td>
+                        </tr>
+                        <tr data-nombre="para-llevar">
+                            <td><code>para-llevar</code></td>
+                            <td class="resultado">…</td>
+                        </tr>
+                        <tr data-nombre="mesa.4">
+                            <td><code>mesa.4</code></td>
+                            <td class="resultado">…</td>
+                        </tr>
+                        <tr data-nombre="Mesa">
+                            <td><code>Mesa</code></td>
+                            <td class="resultado">…</td>
+                        </tr>
+                        <tr data-nombre="2mesa">
+                            <td><code>2mesa</code></td>
+                            <td class="resultado">…</td>
+                        </tr>
+                        <tr data-nombre="xmlNota">
+                            <td><code>xmlNota</code></td>
+                            <td class="resultado">…</td>
+                        </tr>
+                        <tr data-nombre="mesa de">
+                            <td><code>mesa de</code></td>
+                            <td class="resultado">…</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn" id="btn-nombres">Clasificar los nombres</button>
+        </section>
+
+        <section id="atributos" class="section">
+            <p class="kicker">Parte 6</p>
+            <h2>6. El atributo guarda un solo texto</h2>
+            <p>
+                Un atributo es un par nombre/valor en la etiqueta de inicio, siempre entre comillas.
+                Alcanza para un dato corto y estable, como la fecha escrita en una sola cadena.
+                Cuando el dato crece, el elemento es el lugar.
+            </p>
+            <ul class="steps">
+                <li>Varios valores van en elementos repetidos. El atributo guarda un solo texto.</li>
+                <li>Un árbol de hijos vive en un elemento. El atributo no tiene hijos.</li>
+                <li>Sumar un dato nuevo es agregar un hijo. En el atributo hay que cambiar el formato del texto.</li>
+            </ul>
+            <div class="grid-2">
+                <div>
+                    <h3>Todo en atributos</h3>
+                    <pre><code>&lt;nota fecha="12/11/2022" para="Ana Lucía"&gt;
+  &lt;de&gt;Juan&lt;/de&gt;
+&lt;/nota&gt;</code></pre>
+                </div>
+                <div>
+                    <h3>Los mismos datos como elementos</h3>
+                    <pre><code>&lt;nota&gt;
+  &lt;fecha&gt;
+    &lt;dia&gt;12&lt;/dia&gt;
+    &lt;mes&gt;11&lt;/mes&gt;
+    &lt;anio&gt;2022&lt;/anio&gt;
+  &lt;/fecha&gt;
+  &lt;para&gt;Ana&lt;/para&gt;
+  &lt;para&gt;Lucía&lt;/para&gt;
+  &lt;de&gt;Juan&lt;/de&gt;
+&lt;/nota&gt;</code></pre>
+                </div>
+            </div>
+            <button type="button" class="btn" id="btn-atributos">Comparar las dos formas</button>
+            <p class="salida mono" id="salida-atributos" aria-live="polite">El botón lee las dos formas con DOMParser.</p>
+        </section>
+
+        <section id="espacios" class="section">
+            <p class="kicker">Parte 7</p>
+            <h2>7. Un prefijo evita que dos nombres choquen</h2>
+            <p>
+                Los nombres de los elementos los elige quien escribe el XML.
+                Si se mezclan dos documentos, el mismo nombre puede querer decir dos cosas.
+                En El Break, <code>mesa</code> puede ser el número de la barra o un mueble del catálogo.
+            </p>
+            <p>
+                El conflicto se evita con un prefijo. El prefijo se ata a un espacio de nombres
+                con el atributo <code>xmlns</code> en la etiqueta de inicio.
+                La dirección identifica el vocabulario. Esta página no llama a ese servidor.
+            </p>
+            <pre><code>&lt;pedido xmlns:barra="http://elbreak.edu/barra"
+        xmlns:mueble="http://elbreak.edu/muebles"&gt;
+  &lt;barra:mesa&gt;4&lt;/barra:mesa&gt;
+  &lt;mueble:mesa&gt;roble&lt;/mueble:mesa&gt;
+&lt;/pedido&gt;</code></pre>
+            <button type="button" class="btn" id="btn-espacios">Leer las dos mesa</button>
+            <p class="salida mono" id="salida-espacios" aria-live="polite">Las dos se llaman mesa. El espacio de nombres las separa.</p>
+        </section>
+
+        <section id="mostrar" class="section">
+            <p class="kicker">Parte 8</p>
+            <h2>8. El navegador muestra el XML tal cual. XSLT lo transforma</h2>
+            <p>
+                Los navegadores principales abren un archivo XML. Muestran el documento, con sus etiquetas.
+                Eso todavía no es una página HTML, porque el XML no trae la presentación.
+            </p>
+            <p>
+                Las etiquetas las inventa quien escribe el documento. El navegador no puede saber si
+                <code>&lt;table&gt;</code> es una tabla de HTML o una mesa. Sin una indicación de cómo mostrar los datos,
+                deja el documento como está.
+            </p>
+            <p>
+                Para convertirlo en una página se usa XSLT: Extensible Stylesheet Language Transformations.
+                Es un lenguaje para transformar XML. Una plantilla puede producir XHTML, u otro documento XML.
+            </p>
+            <pre><code>&lt;xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+  &lt;xsl:template match="/"&gt;
+    &lt;article&gt;
+      &lt;h3&gt;&lt;xsl:value-of select="nota/encabezado"/&gt;&lt;/h3&gt;
+      &lt;p&gt;Para &lt;xsl:value-of select="nota/para"/&gt;.
+         De &lt;xsl:value-of select="nota/de"/&gt;.&lt;/p&gt;
+      &lt;p&gt;&lt;xsl:value-of select="nota/cuerpo"/&gt;&lt;/p&gt;
+    &lt;/article&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</code></pre>
+            <p class="hint">
+                <code>match="/"</code> es la plantilla de la raíz del documento.
+                <code>xsl:value-of</code> toma el texto de un elemento.
+            </p>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-xslt">Transformar la nota con XSLT</button>
+                <button type="button" class="btn btn-light" id="btn-descarga">Descargar nota.xml</button>
+            </div>
+            <div id="xslt-resultado" class="ticket" aria-live="polite">
+                <p>La transformación aparece acá.</p>
+            </div>
+            <p class="salida" id="salida-xslt" aria-live="polite">
+                El archivo descargado, abierto en el navegador, se ve con sus etiquetas.
+                El botón de XSLT lo convierte en el ticket.
+            </p>
+        </section>
+
+        <section id="practica" class="section">
+            <p class="kicker">Para cerrar</p>
+            <h2>9. La misma página, otra nota</h2>
+            <p>
+                Primero se lee la nota de Juan. Después, la de Pedro entra en los mismos elementos.
+                El HTML del ticket no se reemplaza: cambian los textos.
+            </p>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-prac-juan">Leer la nota de Juan</button>
+                <button type="button" class="btn" id="btn-prac-pedro">Leer la nota de Pedro</button>
+                <button type="button" class="btn btn-light" id="btn-prac-comprobar">Comprobar</button>
+            </div>
+            <div class="grid-2">
+                <pre id="prac-xml"></pre>
+                <article class="ticket" id="ticket-prac">
+                    <h3 id="prac-encabezado">El ticket aparece al leer una nota.</h3>
+                    <p id="prac-para"></p>
+                    <p id="prac-de"></p>
+                    <p id="prac-cuerpo"></p>
+                    <p id="prac-fecha"></p>
+                </article>
+            </div>
+            <p class="salida" id="salida-practica" aria-live="polite">La comprobación espera la nota de Pedro en el ticket.</p>
+
+            <h3>Chequeo rápido</h3>
+            <p>Ocho preguntas de esta clase. En el aula virtual queda la autoevaluación formativa del módulo.</p>
+            <p class="score">Resultado: <span id="puntaje">0 de 8</span></p>
+            <p class="hint" id="puntaje-detalle">Todavía no hay respuestas.</p>
+
+            <article class="quiz-item" data-answer="datos" data-ok="Sí. XML se diseñó para almacenar y transportar datos, y para que lo lean personas y programas." data-bad="XML guarda y transporta datos. El texto tiene que poder leerlo una persona y también un programa.">
+                <h3>1. ¿Para qué se diseñó XML?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="datos">Para almacenar y transportar datos, legible para personas y para programas</button>
+                    <button type="button" class="btn btn-light" data-value="color">Para definir el color y el tamaño de la página</button>
+                    <button type="button" class="btn btn-light" data-value="js">Para reemplazar a JavaScript</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="etiquetas" data-ok="Sí. El XML es información en etiquetas. Hace falta un programa para enviarlo, guardarlo o mostrarlo." data-bad="El documento no se dibuja solo. Es información envuelta en etiquetas, y un programa la envía, la guarda o la muestra.">
+                <h3>2. ¿Qué hace un documento XML por sí solo?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="etiquetas">Es información en etiquetas. Hace falta un programa para enviarla, guardarla o mostrarla</button>
+                    <button type="button" class="btn btn-light" data-value="pagina">Dibuja la nota como una página terminada</button>
+                    <button type="button" class="btn btn-light" data-value="servidor">Ejecuta el pedido en el servidor</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="roles" data-ok="Sí. XML almacena o transporta el dato. HTML lo formatea y lo muestra." data-bad="En esa pareja, XML lleva los datos y HTML los presenta. Si el dato cambia, se puede actualizar la página sin reescribir su HTML.">
+                <h3>3. Cuando una aplicación usa XML y HTML, ¿qué papel cumple cada uno?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="roles">XML almacena o transporta los datos. HTML los formatea y los muestra</button>
+                    <button type="button" class="btn btn-light" data-value="al-reves">HTML guarda el dato y XML elige la tipografía</button>
+                    <button type="button" class="btn btn-light" data-value="css">XML es la hoja de estilos de HTML</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="hermanos" data-ok="Sí. La raíz es nota. para, de, encabezado y cuerpo son hermanos." data-bad="El árbol tiene una raíz, nota. Los cuatro elementos son hijos de nota y, entre sí, hermanos. fecha es un atributo.">
+                <h3>4. En la nota de Juan, ¿cuál es la raíz y qué son <code>para</code>, <code>de</code>, <code>encabezado</code> y <code>cuerpo</code>?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="hermanos">La raíz es nota. Esos cuatro son hermanos</button>
+                    <button type="button" class="btn btn-light" data-value="para">La raíz es para. Los otros tres son atributos</button>
+                    <button type="button" class="btn btn-light" data-value="prologo">La raíz es el prólogo. Los cuatro quedan fuera del árbol</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="comillas" data-ok="Sí. El valor del atributo va entre comillas, cada elemento se cierra y el anidado cierra adentro." data-bad="En XML el atributo va entre comillas, toda etiqueta se cierra y un elemento abierto adentro de otro se cierra ahí adentro.">
+                <h3>5. ¿Cuál de estas escrituras está bien formada?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="comillas"><code>&lt;nota fecha="12/11/2022"&gt;&lt;para&gt;Ana&lt;/para&gt;&lt;/nota&gt;</code></button>
+                    <button type="button" class="btn btn-light" data-value="sin"><code>&lt;nota fecha=12/11/2022&gt;&lt;para&gt;Ana&lt;/para&gt;&lt;/nota&gt;</code></button>
+                    <button type="button" class="btn btn-light" data-value="nido"><code>&lt;b&gt;&lt;i&gt;texto&lt;/b&gt;&lt;/i&gt;</code></button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="xmlnota" data-ok="Sí. xmlNota empieza con xml. para-llevar y _codigo cumplen las reglas." data-bad="Un nombre no puede empezar con xml. para-llevar y _codigo sí están permitidos.">
+                <h3>6. ¿Qué nombre de elemento no está permitido?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="xmlnota"><code>xmlNota</code></button>
+                    <button type="button" class="btn btn-light" data-value="guion"><code>para-llevar</code></button>
+                    <button type="button" class="btn btn-light" data-value="bajo"><code>_codigo</code></button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="crece" data-ok="Sí. Varios valores y un árbol van en elementos. El atributo guarda un solo texto." data-bad="El atributo es un solo texto. Para repetir un valor, armar hijos o sumar un dato, se usa un elemento.">
+                <h3>7. ¿Cuándo conviene un elemento en lugar de un atributo?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="crece">Cuando hay varios valores, un árbol de hijos o un dato que va a crecer</button>
+                    <button type="button" class="btn btn-light" data-value="corto">Cuando el dato es un texto corto que no se va a partir</button>
+                    <button type="button" class="btn btn-light" data-value="prologo">Cuando hay que escribir el prólogo</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="xslt" data-ok="Sí. Sin presentación, el navegador muestra el documento tal cual. XSLT lo transforma en XHTML o en otro XML." data-bad="El navegador muestra el XML con sus etiquetas. XSLT es la transformación a XHTML o a otro XML.">
+                <h3>8. ¿Qué hace el navegador con un XML pelado y qué hace XSLT?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="xslt">Muestra el documento tal cual. XSLT lo transforma en XHTML o en otro XML</button>
+                    <button type="button" class="btn btn-light" data-value="html">Trata cualquier etiqueta XML como una etiqueta HTML</button>
+                    <button type="button" class="btn btn-light" data-value="borra">XSLT borra las etiquetas y deja el documento sin datos</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+            <button type="button" class="btn btn-light" id="btn-reiniciar-quiz">Reiniciar el chequeo</button>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Introducción a la Programación Web · Unidad 5 · XML</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
