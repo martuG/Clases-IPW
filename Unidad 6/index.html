@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unidad 6 — Maquetación web</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-bar">
+            <p class="eyebrow">Introducción a la Programación Web · Unidad 6</p>
+            <h1>Maquetación web: el plano antes del código</h1>
+            <p class="header-lead">
+                Antes de programar un sitio hay que decidir cómo se organizan los espacios y los elementos.
+                Esa decisión es la maqueta.
+            </p>
+        </div>
+        <nav class="site-nav" aria-label="Secciones de la clase">
+            <a href="#objetivos">Objetivos</a>
+            <a href="#que-es">Qué es</a>
+            <a href="#por-que">Por qué</a>
+            <a href="#ux">UX</a>
+            <a href="#entregables">Entregables</a>
+            <a href="#semantico">Semántica</a>
+            <a href="#layout">Flex y Grid</a>
+            <a href="#responsive">Adaptativo</a>
+            <a href="#bootstrap">Bootstrap</a>
+            <a href="#flujo">Flujo</a>
+            <a href="#practica">Práctica</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="objetivos" class="section">
+            <p class="kicker">Antes de empezar</p>
+            <h2>Objetivos</h2>
+            <p>Al terminar, deberían poder:</p>
+            <ul class="objective-list">
+                <li>Explicar qué es la maquetación web y qué decide (espacios, menús, tipografía, color).</li>
+                <li>Justificar por qué conviene maquetar antes de programar.</li>
+                <li>Relacionar la maqueta con la experiencia de usuario (UX) y con el trabajo diseño–desarrollo.</li>
+                <li>Distinguir wireframe, mockup y prototipo.</li>
+                <li>Nombrar las regiones semánticas de una página HTML.</li>
+                <li>Elegir Flexbox o Grid según el problema de layout.</li>
+                <li>Diferenciar diseño responsive y adaptativo.</li>
+                <li>Incluir Bootstrap por CDN y armar una fila de 12 columnas.</li>
+            </ul>
+        </section>
+
+        <section id="que-es" class="section">
+            <p class="kicker">Parte 1</p>
+            <h2>1. Maquetar es organizar el espacio</h2>
+            <p>
+                La maquetación web es la etapa en la que se estructuran, organizan y distribuyen de manera gráfica
+                los espacios y elementos del sitio. Ahí se decide dónde van menús, imágenes, botones, videos,
+                enlaces y títulos. Después viene una previsualización de cómo se verá el sitio terminado.
+            </p>
+            <p>
+                En esa misma etapa se eligen paletas de color, tipografías y estilo, para que el diseño cumpla
+                los requerimientos y sea funcional. Sin esa decisión, el HTML y el CSS se escriben a ciegas.
+            </p>
+            <div class="grid-2">
+                <article class="card">
+                    <h3>Qué se ubica</h3>
+                    <p>Logo, navegación, contenido principal, imágenes, formularios, pie de página.</p>
+                </article>
+                <article class="card">
+                    <h3>Qué se define</h3>
+                    <p>Jerarquía visual, colores, tipografías, márgenes y prioridades de contenido.</p>
+                </article>
+            </div>
+            <div class="wire-demo" id="wire-demo" aria-label="Esquema genérico de una página">
+                <div class="wire-header">header · logo + menú</div>
+                <div class="wire-body">
+                    <div class="wire-main">main · contenido</div>
+                    <div class="wire-aside">aside · lateral</div>
+                </div>
+                <div class="wire-footer">footer · pie</div>
+            </div>
+            <p class="hint">Ese dibujo en gris es un wireframe: todavía no hay color ni tipografía final.</p>
+        </section>
+
+        <section id="por-que" class="section">
+            <p class="kicker">Parte 2</p>
+            <h2>2. Sin plano, la casa se construye mal</h2>
+            <p>
+                Empezar un sitio sin un mapa de cómo debe ser puede ser igual de problemático que construir una casa sin planos.
+                La maquetación previa organiza los elementos y permite ver cómo quedará el sitio una vez publicado.
+            </p>
+            <p>
+                Así se conoce cada pieza que el sitio realmente necesita y se diseña pensando en la organización
+                y, sobre todo, en la persona que lo va a usar. Es la etapa en la que se puede definir un estilo propio.
+            </p>
+            <div class="table-wrap">
+                <table>
+                    <caption>Con maqueta y sin maqueta</caption>
+                    <thead>
+                        <tr>
+                            <th>Con maqueta</th>
+                            <th>Sin maqueta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Se discute la estructura antes de escribir CSS.</td>
+                            <td>Se reescribe el HTML cada vez que alguien cambia de idea.</td>
+                        </tr>
+                        <tr>
+                            <td>Diseño y desarrollo hablan el mismo plano.</td>
+                            <td>Cada área imagina una página distinta.</td>
+                        </tr>
+                        <tr>
+                            <td>Se corta lo que no aporta a la experiencia.</td>
+                            <td>Se suman bloques sin criterio claro.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <aside class="callout">
+                <p class="callout-title">Para preguntar en clase</p>
+                <p>Si cambia un requerimiento del sitio, ¿qué conviene revisar primero: el wireframe o el código?</p>
+            </aside>
+        </section>
+
+        <section id="ux" class="section">
+            <p class="kicker">Parte 3</p>
+            <h2>3. La maqueta sirve a la UX</h2>
+            <p>
+                La experiencia del usuario (UX, <em>user experience</em>) es un factor decisivo para que alguien
+                se quede en el sitio. La maqueta permite diseñar y rediseñar cuantas veces haga falta antes de
+                invertir horas de programación.
+            </p>
+            <p>
+                También mejora el flujo entre diseño y software: menos idas y vueltas, menos tiempo perdido
+                en codificar una disposición que después se descarta.
+            </p>
+            <div class="grid-3">
+                <article class="card">
+                    <h3>UX</h3>
+                    <p>Cómo se siente el recorrido: ¿se encuentra lo buscado? ¿los pasos son claros?</p>
+                </article>
+                <article class="card">
+                    <h3>UI</h3>
+                    <p>Cómo se ve: botones, tipografía, colores e iconos.</p>
+                </article>
+                <article class="card">
+                    <h3>Maqueta</h3>
+                    <p>Une las dos: fija la disposición (UX) y anticipa el estilo (UI).</p>
+                </article>
+            </div>
+            <aside class="callout callout-ok">
+                <p>
+                    Accesibilidad también se decide acá: contraste, tamaño de zona clicable y orden del HTML
+                    alineado con el orden visual. No es un parche al final.
+                </p>
+            </aside>
+        </section>
+
+        <section id="entregables" class="section">
+            <p class="kicker">Parte 4</p>
+            <h2>4. Wireframe, mockup y prototipo</h2>
+            <p>
+                Tres entregables distintos. Mezclarlos genera discusiones confusas: alguien discute el color
+                cuando todavía no está definida la estructura.
+            </p>
+            <div class="grid-3">
+                <article class="card" id="card-wire">
+                    <p class="role role-html">1</p>
+                    <h3>Wireframe</h3>
+                    <p>Esquema en gris. Solo bloques y jerarquía. Barato de cambiar.</p>
+                </article>
+                <article class="card" id="card-mock">
+                    <p class="role role-css">2</p>
+                    <h3>Mockup</h3>
+                    <p>Ya tiene color, tipografía e imágenes. Se parece a la página, sin clics reales.</p>
+                </article>
+                <article class="card" id="card-proto">
+                    <p class="role role-js">3</p>
+                    <h3>Prototipo</h3>
+                    <p>Versión navegable para probar el recorrido del usuario.</p>
+                </article>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn" data-etapa="wire">Ver wireframe</button>
+                <button type="button" class="btn btn-light" data-etapa="mock">Ver mockup</button>
+                <button type="button" class="btn btn-light" data-etapa="proto">Ver prototipo</button>
+            </div>
+            <div class="preview-stage" id="preview-stage" data-mode="wire">
+                <div class="preview-bar">Cabecera</div>
+                <div class="preview-hero">Bloque principal</div>
+                <div class="preview-row">
+                    <div class="preview-card">Bloque A</div>
+                    <div class="preview-card">Bloque B</div>
+                    <div class="preview-card">Bloque C</div>
+                </div>
+                <p class="preview-label" id="preview-label">Wireframe: bloques sin color final.</p>
+            </div>
+        </section>
+
+        <section id="semantico" class="section">
+            <p class="kicker">Parte 5</p>
+            <h2>5. El esqueleto se escribe en HTML semántico</h2>
+            <p>
+                En código, la maqueta empieza nombrando regiones. HTML5 aporta etiquetas que describen el rol
+                de cada zona. Eso ayuda a lectores de pantalla, a buscadores y al equipo que mantiene el sitio.
+            </p>
+            <pre><code>&lt;body&gt;
+  &lt;header&gt;…&lt;/header&gt;
+  &lt;nav&gt;…&lt;/nav&gt;
+  &lt;main&gt;
+    &lt;section&gt;…&lt;/section&gt;
+    &lt;aside&gt;…&lt;/aside&gt;
+  &lt;/main&gt;
+  &lt;footer&gt;…&lt;/footer&gt;
+&lt;/body&gt;</code></pre>
+            <div class="table-wrap">
+                <table>
+                    <caption>Regiones semánticas</caption>
+                    <thead>
+                        <tr>
+                            <th>Etiqueta</th>
+                            <th>Rol</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>header</code></td>
+                            <td>Cabecera del sitio o de una sección.</td>
+                        </tr>
+                        <tr>
+                            <td><code>nav</code></td>
+                            <td>Navegación principal.</td>
+                        </tr>
+                        <tr>
+                            <td><code>main</code></td>
+                            <td>Contenido principal. Una sola vez por página.</td>
+                        </tr>
+                        <tr>
+                            <td><code>aside</code></td>
+                            <td>Contenido relacionado (barra lateral u otro bloque secundario).</td>
+                        </tr>
+                        <tr>
+                            <td><code>footer</code></td>
+                            <td>Pie de página.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn" id="btn-semantico">Mostrar el esqueleto</button>
+            <pre id="salida-semantico" class="compact-pre" aria-live="polite">El botón escribe el esqueleto semántico.</pre>
+        </section>
+
+        <section id="layout" class="section">
+            <p class="kicker">Parte 6</p>
+            <h2>6. Flexbox alinea. Grid arma el plano.</h2>
+            <p>
+                Con el modelo de caja ya visto, faltaba decidir cómo se organizan varias cajas juntas.
+                Hoy casi todo el layout moderno se resuelve con dos herramientas:
+            </p>
+            <ul class="steps">
+                <li><strong>Flexbox</strong>: una dimensión (fila o columna). Menús, botones en línea, alinear ítems.</li>
+                <li><strong>CSS Grid</strong>: dos dimensiones (filas y columnas). Plano general de la página.</li>
+            </ul>
+            <p>Suelen combinarse: Grid define las zonas; Flexbox ordena lo que hay adentro de cada zona.</p>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-flex">Demo Flexbox</button>
+                <button type="button" class="btn btn-light" id="btn-grid">Demo Grid</button>
+            </div>
+            <div class="layout-lab" id="layout-lab" data-mode="flex">
+                <div class="lab-item">A</div>
+                <div class="lab-item">B</div>
+                <div class="lab-item">C</div>
+            </div>
+            <p class="salida" id="salida-layout" aria-live="polite">Flexbox: los tres ítems comparten una fila y se espacian.</p>
+            <div class="grid-2">
+                <pre><code>/* Flex */
+.barra {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}</code></pre>
+                <pre><code>/* Grid */
+.pagina {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  gap: 1rem;
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="responsive" class="section">
+            <p class="kicker">Parte 7</p>
+            <h2>7. Responsive y adaptativo no son lo mismo</h2>
+            <p>
+                Una forma moderna de diseñar es hacer sitios que se acomoden a distintos anchos.
+                Hay dos caminos cercanos, pero no idénticos:
+            </p>
+            <div class="grid-2">
+                <article class="card">
+                    <h3>Responsive</h3>
+                    <p>
+                        Una misma maqueta fluye: unidades relativas, imágenes fluidas y media queries.
+                        Hoy suele arrancarse <em>mobile-first</em>.
+                    </p>
+                </article>
+                <article class="card">
+                    <h3>Adaptativo</h3>
+                    <p>
+                        Se preparan layouts para anchos concretos (móvil, tablet, escritorio)
+                        y el sitio elige cuál mostrar.
+                    </p>
+                </article>
+            </div>
+            <p>
+                Ambos buscan legibilidad y uso cómodo en celular y en escritorio.
+                La diferencia está en cuánto se “reflujo” frente a cuánto se “cambia de plantilla”.
+            </p>
+            <div class="viewport-demo">
+                <div class="viewport-frame" id="viewport-frame" data-size="desktop">
+                    <div class="viewport-page">
+                        <div class="vp-header">Cabecera</div>
+                        <div class="vp-cols">
+                            <div class="vp-main">Contenido</div>
+                            <div class="vp-side">Lateral</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button type="button" class="btn btn-light" data-vp="mobile">Móvil</button>
+                    <button type="button" class="btn btn-light" data-vp="tablet">Tablet</button>
+                    <button type="button" class="btn" data-vp="desktop">Escritorio</button>
+                </div>
+                <p class="salida" id="salida-vp" aria-live="polite">En escritorio, contenido y lateral van en dos columnas.</p>
+            </div>
+        </section>
+
+        <section id="bootstrap" class="section">
+            <p class="kicker">Parte 8</p>
+            <h2>8. Bootstrap: grilla y componentes listos</h2>
+            <p>
+                Estos enfoques también se logran con frameworks de maquetación y plantillas prediseñadas.
+                Bootstrap es un conjunto de herramientas de front-end: desde el prototipo hasta producción
+                en tiempos más cortos.
+            </p>
+            <ul class="steps">
+                <li>Sistema de grilla de <strong>12 columnas</strong>.</li>
+                <li>Componentes: navbar, cards, formularios, modales.</li>
+                <li>Utilidades de espaciado, tipografía y color.</li>
+                <li>Comportamiento responsive integrado.</li>
+            </ul>
+            <p>
+                Se puede incluir por CDN. La documentación oficial está en
+                <a href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank" rel="noopener noreferrer">getbootstrap.com</a>.
+            </p>
+            <pre><code>&lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+
+&lt;div class="container"&gt;
+  &lt;div class="row"&gt;
+    &lt;div class="col-12 col-md-8"&gt;Contenido principal&lt;/div&gt;
+    &lt;div class="col-12 col-md-4"&gt;Barra lateral&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            <p class="hint">
+                <code>col-12</code> ocupa todo el ancho en móvil. Desde <code>md</code>, el contenido toma 8 columnas y el lateral 4.
+            </p>
+            <div class="bs-grid" aria-label="Grilla de 12 columnas">
+                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
+                <span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span>
+            </div>
+            <div class="bs-row-demo" id="bs-row-demo">
+                <div class="bs-main" id="bs-main">col-md-8 · contenido</div>
+                <div class="bs-side" id="bs-side">col-md-4 · lateral</div>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-bs-8-4">8 + 4</button>
+                <button type="button" class="btn btn-light" id="btn-bs-6-6">6 + 6</button>
+                <button type="button" class="btn btn-light" id="btn-bs-12">12 (apilado)</button>
+            </div>
+            <p class="salida" id="salida-bs" aria-live="polite">La grilla suma 12. Acá: 8 para el contenido y 4 para el lateral.</p>
+        </section>
+
+        <section id="flujo" class="section">
+            <p class="kicker">Parte 9</p>
+            <h2>9. Un flujo de trabajo corto</h2>
+            <ol class="steps">
+                <li>Listar contenidos y prioridades.</li>
+                <li>Armar wireframes de las pantallas clave.</li>
+                <li>Definir paleta, tipografía y componentes (mockup).</li>
+                <li>Validar con un prototipo liviano.</li>
+                <li>Pasar a HTML semántico + CSS (Flex/Grid) o a Bootstrap.</li>
+                <li>Probar en distintos anchos y con teclado.</li>
+            </ol>
+            <aside class="callout">
+                <p>
+                    La maquetación no reemplaza al código: lo ordena. Programar sin plano se puede,
+                    pero cuesta más tiempo y suele salir una experiencia peor.
+                </p>
+            </aside>
+        </section>
+
+        <section id="practica" class="section">
+            <p class="kicker">Para cerrar</p>
+            <h2>10. Armar una maqueta mínima</h2>
+            <p>
+                Primero las regiones semánticas; después un reparto de columnas 8+4.
+                Luego, el chequeo rápido de la clase.
+            </p>
+            <div class="btn-row">
+                <button type="button" class="btn" id="btn-prac-estructura">1. Poner la estructura</button>
+                <button type="button" class="btn" id="btn-prac-grilla">2. Aplicar grilla 8+4</button>
+                <button type="button" class="btn btn-light" id="btn-prac-comprobar">Comprobar</button>
+            </div>
+            <div class="prac-board" id="prac-board" data-estructura="no" data-grilla="no">
+                <p class="prac-placeholder" id="prac-placeholder">Todavía no hay estructura.</p>
+            </div>
+            <p class="salida" id="salida-practica" aria-live="polite">Primero la estructura semántica. Después la grilla 8+4.</p>
+
+            <h3>Chequeo rápido</h3>
+            <p>Ocho preguntas de esta clase. En el aula virtual queda la autoevaluación formativa del módulo.</p>
+            <p class="score">Resultado: <span id="puntaje">0 de 8</span></p>
+            <p class="hint" id="puntaje-detalle">Todavía no hay respuestas.</p>
+
+            <article class="quiz-item" data-answer="espacios" data-ok="Sí. La maquetación organiza espacios y elementos, y anticipa colores y tipografías." data-bad="Maquetar es estructurar y distribuir los espacios del sitio, y definir estilo visual antes de programar.">
+                <h3>1. ¿Qué es la maquetación web?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="espacios">Organizar espacios y elementos, y definir estilo visual del sitio</button>
+                    <button type="button" class="btn btn-light" data-value="servidor">Configurar el servidor y la base de datos</button>
+                    <button type="button" class="btn btn-light" data-value="json">Convertir objetos JavaScript en texto JSON</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="planos" data-ok="Sí. Sin maqueta se construye a ciegas, como una casa sin planos." data-bad="La comparación del material es construir una casa sin planos: falta el mapa antes de programar.">
+                <h3>2. ¿A qué se compara empezar un sitio sin maqueta?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="planos">A construir una casa sin planos</button>
+                    <button type="button" class="btn btn-light" data-value="cookie">A guardar una cookie sin nombre</button>
+                    <button type="button" class="btn btn-light" data-value="xml">A abrir un XML sin prólogo</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="redisenar" data-ok="Sí. La maqueta permite iterar la experiencia antes de invertir horas de código." data-bad="La maqueta importa para UX porque se puede diseñar y rediseñar antes de programar en serio.">
+                <h3>3. ¿Por qué la maqueta importa para la UX?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="redisenar">Permite diseñar y rediseñar antes de programar</button>
+                    <button type="button" class="btn btn-light" data-value="borra">Borra automáticamente los errores de JavaScript</button>
+                    <button type="button" class="btn btn-light" data-value="dns">Elige el proveedor de DNS del sitio</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="wire" data-ok="Sí. El wireframe es el esquema en gris: estructura sin estilo final." data-bad="Wireframe = esquema estructural. Mockup = visual. Prototipo = navegable.">
+                <h3>4. ¿Qué es un wireframe?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="wire">Un esquema en gris que muestra bloques y jerarquía</button>
+                    <button type="button" class="btn btn-light" data-value="mock">La página ya con colores y tipografía final, sin estructura</button>
+                    <button type="button" class="btn btn-light" data-value="cdn">El archivo CSS de Bootstrap en el CDN</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="main" data-ok="Sí. main es el contenido principal y se usa una sola vez por página." data-bad="La región del contenido principal es main. header es la cabecera; aside es contenido relacionado.">
+                <h3>5. ¿Qué etiqueta marca el contenido principal de la página?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="main"><code>main</code></button>
+                    <button type="button" class="btn btn-light" data-value="header"><code>header</code></button>
+                    <button type="button" class="btn btn-light" data-value="aside"><code>aside</code></button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="grid" data-ok="Sí. Grid trabaja filas y columnas a la vez: el plano general. Flexbox es una dimensión." data-bad="Para el plano general (cabecera, contenido, lateral, pie) conviene CSS Grid. Flexbox ordena en una línea.">
+                <h3>6. ¿Cuándo conviene CSS Grid frente a Flexbox?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="grid">Cuando hay que armar filas y columnas a la vez (plano de página)</button>
+                    <button type="button" class="btn btn-light" data-value="flex">Solo cuando hay un menú de un ítem</button>
+                    <button type="button" class="btn btn-light" data-value="nunca">Nunca: Grid reemplazó a HTML</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="fluye" data-ok="Sí. Responsive hace fluir una misma maqueta; adaptativo prepara layouts por anchos concretos." data-bad="Responsive = una maqueta que fluye. Adaptativo = layouts distintos según el ancho.">
+                <h3>7. ¿En qué se diferencia responsive de adaptativo?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="fluye">Responsive fluye una maqueta; adaptativo elige layouts por ancho</button>
+                    <button type="button" class="btn btn-light" data-value="igual">No hay ninguna diferencia</button>
+                    <button type="button" class="btn btn-light" data-value="solo-boot">Solo Bootstrap puede ser responsive</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+
+            <article class="quiz-item" data-answer="doce" data-ok="Sí. La grilla de Bootstrap suma 12 columnas. 8+4 o 6+6 son repartos válidos." data-bad="Bootstrap usa una grilla de 12 columnas. Las clases col-* reparte ese total.">
+                <h3>8. ¿Cuántas columnas tiene la grilla de Bootstrap?</h3>
+                <div class="quiz-options">
+                    <button type="button" class="btn btn-light" data-value="doce">12</button>
+                    <button type="button" class="btn btn-light" data-value="ocho">8</button>
+                    <button type="button" class="btn btn-light" data-value="cien">100</button>
+                </div>
+                <p class="feedback" hidden></p>
+            </article>
+            <button type="button" class="btn btn-light" id="btn-reiniciar-quiz">Reiniciar el chequeo</button>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Introducción a la Programación Web · Unidad 6 · Maquetación web</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
