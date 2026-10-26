@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<empresa razonSocial="Norte Logística SA" cuit="30-71234567-8">
+  <empleado legajo="1042">
+    <nombre>Martina Ríos</nombre>
+    <area>Ventas</area>
+    <activo>si</activo>
+  </empleado>
+  <empleado legajo="1108">
+    <nombre>Diego Paredes</nombre>
+    <area>Operaciones</area>
+    <activo>si</activo>
+  </empleado>
+  <empleado legajo="1185">
+    <nombre>Carla Méndez</nombre>
+    <area>Administración</area>
+    <activo>no</activo>
+  </empleado>
+</empresa>
